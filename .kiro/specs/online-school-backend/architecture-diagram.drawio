@@ -1,0 +1,169 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="5.0" etag="def456" version="22.1.16" type="device">
+  <diagram name="Architecture Diagram" id="architecture">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Client Layer -->
+        <mxCell id="client-layer" value="Client Applications&#xa;(Frontend, Mobile, Postman)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="40" width="600" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Controller Layer -->
+        <mxCell id="controller-layer" value="Controller Layer (REST APIs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="140" width="600" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Individual Controllers -->
+        <mxCell id="user-controller" value="UserController" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="220" y="200" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="student-controller" value="StudentController" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="330" y="200" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="teacher-controller" value="TeacherController" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="440" y="200" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="course-controller" value="CourseController" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="550" y="200" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="clazz-controller" value="ClazzController" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="660" y="200" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="registration-controller" value="RegistrationController" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="220" y="260" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Service Layer -->
+        <mxCell id="service-layer" value="Service Layer (Business Logic)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="340" width="600" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Individual Services -->
+        <mxCell id="user-service" value="UserService" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="220" y="400" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="student-service" value="StudentService" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="330" y="400" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="teacher-service" value="TeacherService" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="440" y="400" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="course-service" value="CourseService" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="550" y="400" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="clazz-service" value="ClazzService" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="660" y="400" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="registration-service" value="RegistrationService" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="220" y="460" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Repository Layer -->
+        <mxCell id="repository-layer" value="Repository Layer (Data Access)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="540" width="600" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Individual Repositories -->
+        <mxCell id="user-repository" value="UserRepository" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="220" y="600" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="student-repository" value="StudentRepository" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="330" y="600" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="teacher-repository" value="TeacherRepository" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="440" y="600" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="course-repository" value="CourseRepository" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="550" y="600" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="clazz-repository" value="ClazzRepository" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="660" y="600" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="registration-repository" value="RegistrationRepository" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="220" y="660" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Database Layer -->
+        <mxCell id="database-layer" value="H2 In-Memory Database" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdeb8b;strokeColor=#36393d;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="740" width="600" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Arrows -->
+        <mxCell id="client-controller-arrow" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="client-layer" target="controller-layer">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="120" as="sourcePoint" />
+            <mxPoint x="450" y="70" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="http-label" value="HTTP/REST" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="450" y="110" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="controller-service-arrow" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="controller-layer" target="service-layer">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="200" as="sourcePoint" />
+            <mxPoint x="450" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="method-calls-label" value="Method Calls" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="440" y="310" width="90" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="service-repository-arrow" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="service-layer" target="repository-layer">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jpa-calls-label" value="JPA Calls" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="455" y="510" width="70" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="repository-database-arrow" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="repository-layer" target="database-layer">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="600" as="sourcePoint" />
+            <mxPoint x="450" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sql-label" value="SQL/JDBC" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="455" y="710" width="70" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Side Components -->
+        <mxCell id="exception-handler" value="Global Exception Handler&#xa;(@ControllerAdvice)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#ff6666;" vertex="1" parent="1">
+          <mxGeometry x="860" y="200" width="140" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dto-layer" value="DTO Layer&#xa;(Data Transfer Objects)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ccffcc;strokeColor=#66ff66;" vertex="1" parent="1">
+          <mxGeometry x="860" y="300" width="140" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="validation" value="Bean Validation&#xa;(@Valid, @NotNull, etc.)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffcc;strokeColor=#ffff66;" vertex="1" parent="1">
+          <mxGeometry x="860" y="400" width="140" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="h2-console" value="H2 Console&#xa;(Development Tool)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ccccff;strokeColor=#6666ff;" vertex="1" parent="1">
+          <mxGeometry x="860" y="740" width="140" height="60" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
