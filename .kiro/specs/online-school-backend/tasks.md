@@ -46,7 +46,7 @@
   - Configure JPA annotations and validation
   - _Requirements: 2.6, 3.1_
 
-- [x] 5.2 Configure bidirectional relationships between all entities
+- [x] 5.2 Configure bidirectional rel ationships between all entities
   - Add Many-to-Many relationship between Student and Clazz entities
   - Add Many-to-Many relationship between Course and Clazz entities
   - Configure cascade operations and fetch strategies
