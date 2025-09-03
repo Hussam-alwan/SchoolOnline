@@ -50,10 +50,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="student-registration-label" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="270" y="455" width="30" height="30" as="geometry" />
+          <mxGeometry x="330" y="360" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="student-registration-label-2" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="710" y="550" width="30" height="30" as="geometry" />
+          <mxGeometry x="585" y="610" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="course-registration" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;entryX=1;entryY=0.75;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="course-entity" target="registration-entity" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -64,9 +64,6 @@
               <mxPoint x="360" y="515" />
             </Array>
           </mxGeometry>
-        </mxCell>
-        <mxCell id="course-registration-label" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="585" y="600" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="teacher-clazz" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="teacher-entity" target="clazz-entity" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -87,7 +84,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="student-clazz-label" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="450" y="430" width="30" height="30" as="geometry" />
+          <mxGeometry x="270" y="460" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="course-clazz" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.467;entryY=1.025;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="course-entity" target="clazz-entity" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -95,8 +92,17 @@
             <mxPoint x="480" y="600" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="LSDt0vibLzwq-zSZy_N_-1" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="LSDt0vibLzwq-zSZy_N_-1" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="750" y="410" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jGkFfztJ_FcEOKNLHKXU-3" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="405" y="360" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jGkFfztJ_FcEOKNLHKXU-4" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="630" y="460" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jGkFfztJ_FcEOKNLHKXU-5" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="710" y="550" width="30" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
