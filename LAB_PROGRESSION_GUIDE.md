@@ -57,19 +57,28 @@ Total students: 3
 
 ---
 
-### Lab 2: JUnit & Testing (Coming Soon)
+### Lab 2: JUnit & Testing ✅ COMPLETE
 **Branch:** `lab/junit-2-testing`
 
 **Focus:** Advanced testing concepts and best practices
 
-**Topics:**
-- JUnit 5 advanced features
-- Test fixtures and setup/teardown
-- Parameterized tests
-- Test organization and naming conventions
-- Mocking and stubbing
-- Test coverage analysis
-- Integration testing basics
+**What You'll Learn:**
+- JUnit 5 advanced features and annotations
+- Nested test classes for organization
+- Parameterized tests with multiple data sources
+- Repeated tests for stress testing
+- Test fixtures and lifecycle management
+- Assertion methods and complex assertions
+- Test naming conventions and display names
+- Edge cases and boundary testing
+- Best practices for maintainable tests
+
+**Key Components:**
+- `Course.java` - New domain model for testing
+- `CourseTest.java` - 24 tests with nested classes and parameterized tests
+- `StudentRegistryAdvancedTest.java` - 24 tests with advanced patterns
+
+**Test Results:** 48/48 tests passing ✅
 
 ---
 
