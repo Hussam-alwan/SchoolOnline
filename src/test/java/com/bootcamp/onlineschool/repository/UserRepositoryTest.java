@@ -28,7 +28,8 @@ class UserRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        testStudent = new Student("John Doe", "john.doe@example.com", "STU001", LocalDate.of(2023, 1, 15));
+        testStudent = new Student("STU001", "John Doe", "john.doe@example.com");
+        testStudent.setEnrollmentDate(LocalDate.of(2023, 1, 15));
         testTeacher = new Teacher("Jane Smith", "jane.smith@example.com", "EMP001", "Computer Science", LocalDate.of(2020, 8, 1));
         
         entityManager.persistAndFlush(testStudent);

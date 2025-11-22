@@ -31,10 +31,7 @@ public class CourseDTO {
     @Min(value = 1, message = "Credits must be at least 1")
     private Integer credits;
 
-    @Schema(description = "Duration of the course in weeks", example = "12", required = true)
-    @NotNull(message = "Duration is required")
-    @Min(value = 1, message = "Duration must be at least 1")
-    private Integer duration;
+
 
     @Schema(description = "List of class IDs where this course is offered", example = "[1, 2, 3]")
     private Set<Long> classIds = new HashSet<>();
@@ -52,21 +49,19 @@ public class CourseDTO {
     public CourseDTO() {}
 
     // Constructor with required fields
-    public CourseDTO(String name, String description, Integer credits, Integer duration) {
+    public CourseDTO(String name, String description, Integer credits) {
         this.name = name;
         this.description = description;
         this.credits = credits;
-        this.duration = duration;
     }
 
     // Constructor with all fields
-    public CourseDTO(Long id, String name, String description, Integer credits, Integer duration,
+    public CourseDTO(Long id, String name, String description, Integer credits,
                     LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.credits = credits;
-        this.duration = duration;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -102,14 +97,6 @@ public class CourseDTO {
 
     public void setCredits(Integer credits) {
         this.credits = credits;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
     }
 
     public Set<Long> getClassIds() {
@@ -151,24 +138,13 @@ public class CourseDTO {
         }
 
         CourseDTO dto = new CourseDTO(
-            course.getId(),
-            course.getName(),
-            course.getDescription(),
-            course.getCredits(),
-            course.getDuration(),
-            course.getCreatedAt(),
-            course.getUpdatedAt()
+            course.getCourseName(),
+            null,
+            course.getCredits()
         );
-
-        // Convert class relationships to IDs
-        if (course.getClasses() != null) {
-            course.getClasses().forEach(clazz -> dto.getClassIds().add(clazz.getId()));
-        }
-
-        // Convert registration relationships to IDs
-        if (course.getRegistrations() != null) {
-            course.getRegistrations().forEach(registration -> dto.getRegistrationIds().add(registration.getId()));
-        }
+        dto.setId(course.getId());
+        dto.setCreatedAt(course.getCreatedAt());
+        dto.setUpdatedAt(course.getUpdatedAt());
 
         return dto;
     }
@@ -177,12 +153,8 @@ public class CourseDTO {
     public Course toEntity() {
         Course course = new Course();
         course.setId(this.id);
-        course.setName(this.name);
-        course.setDescription(this.description);
+        course.setCourseName(this.name);
         course.setCredits(this.credits);
-        course.setDuration(this.duration);
-        course.setCreatedAt(this.createdAt);
-        course.setUpdatedAt(this.updatedAt);
         return course;
     }
 
@@ -193,7 +165,6 @@ public class CourseDTO {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", credits=" + credits +
-                ", duration=" + duration +
                 ", classIds=" + classIds +
                 ", registrationIds=" + registrationIds +
                 ", createdAt=" + createdAt +

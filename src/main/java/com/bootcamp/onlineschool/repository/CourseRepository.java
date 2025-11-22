@@ -9,57 +9,60 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * CourseRepository demonstrates Spring Data JPA repository pattern
+ * 
+ * Demonstrates:
+ * - JpaRepository interface
+ * - Custom query methods
+ * - JPQL queries
+ * - Named parameters
+ */
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     
     /**
-     * Find a course by name
-     * @param name the course name to search for
-     * @return Optional containing the course if found
+     * Find course by course ID
      */
-    Optional<Course> findByName(String name);
+    Optional<Course> findByCourseId(String courseId);
     
     /**
-     * Find courses by credits
-     * @param credits the number of credits
-     * @return List of courses with the specified credits
+     * Find courses by instructor name
      */
-    List<Course> findByCredits(Integer credits);
+    List<Course> findByInstructor(String instructor);
     
     /**
-     * Find courses by duration
-     * @param duration the duration in hours
-     * @return List of courses with the specified duration
+     * Find courses by name (case-insensitive)
      */
-    List<Course> findByDuration(Integer duration);
+    List<Course> findByCourseNameContainingIgnoreCase(String courseName);
     
     /**
-     * Check if a course exists with the given name
-     * @param name the course name to check
-     * @return true if course exists, false otherwise
+     * Find available courses (not full)
      */
-    boolean existsByName(String name);
+    @Query("SELECT c FROM Course c WHERE c.enrolledStudents < c.maxStudents ORDER BY c.courseName ASC")
+    List<Course> findAvailableCourses();
     
     /**
-     * Find courses by credits OR duration (custom query method for advanced operations)
-     * @param credits the number of credits to search for
-     * @param duration the duration to search for
-     * @return List of courses matching either the credits or duration criteria
+     * Find full courses
      */
-    @Query("SELECT c FROM Course c WHERE c.credits = :credits OR c.duration = :duration")
-    List<Course> findCoursesByCreditsOrDuration(@Param("credits") Integer credits, @Param("duration") Integer duration);
+    @Query("SELECT c FROM Course c WHERE c.enrolledStudents >= c.maxStudents")
+    List<Course> findFullCourses();
     
     /**
-     * Find courses by minimum credits
-     * @param minCredits the minimum number of credits
-     * @return List of courses with at least the specified credits
+     * Find courses with available seats
      */
-    List<Course> findByCreditsGreaterThanEqual(Integer minCredits);
+    @Query("SELECT c FROM Course c WHERE (c.maxStudents - c.enrolledStudents) >= :minSeats")
+    List<Course> findCoursesWithMinimumSeats(@Param("minSeats") Integer minSeats);
     
     /**
-     * Find courses by maximum duration
-     * @param maxDuration the maximum duration
-     * @return List of courses with duration less than or equal to the specified value
+     * Count available courses
      */
-    List<Course> findByDurationLessThanEqual(Integer maxDuration);
+    @Query("SELECT COUNT(c) FROM Course c WHERE c.enrolledStudents < c.maxStudents")
+    Long countAvailableCourses();
+    
+    /**
+     * Get total enrollment across all courses
+     */
+    @Query("SELECT SUM(c.enrolledStudents) FROM Course c")
+    Long getTotalEnrollment();
 }

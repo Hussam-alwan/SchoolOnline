@@ -12,7 +12,7 @@
     <artifactId>online-school</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>online-school</name>
-    <description>Online School Backend for Bootcamp Students</description>
+    <description>Online School - Lab 4: Database and SQL</description>
     <properties>
         <java.version>21</java.version>
     </properties>

@@ -100,16 +100,6 @@ public class StudentDTO extends UserDTO {
             student.getEnrollmentDate()
         );
 
-        // Convert class relationships to IDs
-        if (student.getClasses() != null) {
-            student.getClasses().forEach(clazz -> dto.getClassIds().add(clazz.getId()));
-        }
-
-        // Convert registration relationships to IDs
-        if (student.getRegistrations() != null) {
-            student.getRegistrations().forEach(registration -> dto.getRegistrationIds().add(registration.getId()));
-        }
-
         return dto;
     }
 
@@ -121,8 +111,6 @@ public class StudentDTO extends UserDTO {
         student.setEmail(this.getEmail());
         student.setStudentId(this.studentId);
         student.setEnrollmentDate(this.enrollmentDate);
-        student.setCreatedAt(this.getCreatedAt());
-        student.setUpdatedAt(this.getUpdatedAt());
         return student;
     }
 

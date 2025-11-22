@@ -172,7 +172,7 @@ public class RegistrationDTO {
             registration.getStudent() != null ? registration.getStudent().getId() : null,
             registration.getCourse() != null ? registration.getCourse().getId() : null,
             registration.getStudent() != null ? registration.getStudent().getName() : null,
-            registration.getCourse() != null ? registration.getCourse().getName() : null,
+            registration.getCourse() != null ? registration.getCourse().getCourseName() : null,
             registration.getCreatedAt(),
             registration.getUpdatedAt()
         );

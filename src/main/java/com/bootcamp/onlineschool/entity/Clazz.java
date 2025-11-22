@@ -175,22 +175,18 @@ public class Clazz {
     // Helper methods for managing relationships
     public void addStudent(Student student) {
         students.add(student);
-        student.getClasses().add(this);
     }
 
     public void removeStudent(Student student) {
         students.remove(student);
-        student.getClasses().remove(this);
     }
 
     public void addCourse(Course course) {
         courses.add(course);
-        course.getClasses().add(this);
     }
 
     public void removeCourse(Course course) {
         courses.remove(course);
-        course.getClasses().remove(this);
     }
 
     @Override

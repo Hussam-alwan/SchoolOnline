@@ -1,186 +1,185 @@
 package com.bootcamp.onlineschool.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Objects;
 
+/**
+ * Course demonstrates JPA entity with relationships
+ * 
+ * Demonstrates:
+ * - @Entity and @Table annotations
+ * - Primary key generation
+ * - Column constraints and validation
+ * - Temporal data handling
+ * - Entity lifecycle callbacks
+ */
 @Entity
 @Table(name = "courses")
 public class Course {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank(message = "Course name is required")
-    @Size(min = 2, max = 100, message = "Course name must be between 2 and 100 characters")
-    @Column(nullable = false, length = 100)
-    private String name;
-
-    @Size(max = 500, message = "Description must not exceed 500 characters")
-    @Column(length = 500)
-    private String description;
-
-    @NotNull(message = "Credits is required")
-    @Min(value = 1, message = "Credits must be at least 1")
-    @Column(nullable = false)
+    
+    @Column(name = "course_id", unique = true, nullable = false, length = 20)
+    private String courseId;
+    
+    @Column(name = "course_name", nullable = false, length = 100)
+    private String courseName;
+    
+    @Column(name = "credits", nullable = false)
     private Integer credits;
-
-    @NotNull(message = "Duration is required")
-    @Min(value = 1, message = "Duration must be at least 1")
-    @Column(nullable = false)
-    private Integer duration;
-
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Clazz> classes = new HashSet<>();
-
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Registration> registrations = new HashSet<>();
-
-    @CreationTimestamp
+    
+    @Column(name = "instructor", nullable = false, length = 100)
+    private String instructor;
+    
+    @Column(name = "max_students", nullable = false)
+    private Integer maxStudents;
+    
+    @Column(name = "enrolled_students", nullable = false)
+    private Integer enrolledStudents;
+    
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
+    
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    // Default constructor
-    public Course() {}
-
-    // Constructor with required fields
-    public Course(String name, String description, Integer credits, Integer duration) {
-        this.name = name;
-        this.description = description;
-        this.credits = credits;
-        this.duration = duration;
+    
+    // Constructors
+    public Course() {
     }
-
+    
+    public Course(String courseId, String courseName, Integer credits, 
+                       String instructor, Integer maxStudents) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.credits = credits;
+        this.instructor = instructor;
+        this.maxStudents = maxStudents;
+        this.enrolledStudents = 0;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+    
+    // Lifecycle callbacks
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+    
+    // Business methods
+    public boolean isFull() {
+        return enrolledStudents >= maxStudents;
+    }
+    
+    public Integer getAvailableSeats() {
+        return maxStudents - enrolledStudents;
+    }
+    
+    public boolean enrollStudent() {
+        if (isFull()) {
+            return false;
+        }
+        enrolledStudents++;
+        return true;
+    }
+    
+    public boolean unenrollStudent() {
+        if (enrolledStudents <= 0) {
+            return false;
+        }
+        enrolledStudents--;
+        return true;
+    }
+    
     // Getters and Setters
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
+    
+    public String getCourseId() {
+        return courseId;
     }
-
-    public void setName(String name) {
-        this.name = name;
+    
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
     }
-
-    public String getDescription() {
-        return description;
+    
+    public String getCourseName() {
+        return courseName;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
+    
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
-
+    
     public Integer getCredits() {
         return credits;
     }
-
+    
     public void setCredits(Integer credits) {
         this.credits = credits;
     }
-
-    public Integer getDuration() {
-        return duration;
+    
+    public String getInstructor() {
+        return instructor;
     }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
+    
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
     }
-
+    
+    public Integer getMaxStudents() {
+        return maxStudents;
+    }
+    
+    public void setMaxStudents(Integer maxStudents) {
+        this.maxStudents = maxStudents;
+    }
+    
+    public Integer getEnrolledStudents() {
+        return enrolledStudents;
+    }
+    
+    public void setEnrolledStudents(Integer enrolledStudents) {
+        this.enrolledStudents = enrolledStudents;
+    }
+    
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
+    
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    
+    @Override
+    public String toString() {
+        return String.format("Course{id=%d, courseId='%s', name='%s', instructor='%s', enrolled=%d/%d}",
+                id, courseId, courseName, instructor, enrolledStudents, maxStudents);
     }
-
-    public Set<Clazz> getClasses() {
-        return classes;
-    }
-
-    public void setClasses(Set<Clazz> classes) {
-        this.classes = classes;
-    }
-
-    public Set<Registration> getRegistrations() {
-        return registrations;
-    }
-
-    public void setRegistrations(Set<Registration> registrations) {
-        this.registrations = registrations;
-    }
-
-    // Helper methods for managing relationships
-    public void addClazz(Clazz clazz) {
-        classes.add(clazz);
-        clazz.getCourses().add(this);
-    }
-
-    public void removeClazz(Clazz clazz) {
-        classes.remove(clazz);
-        clazz.getCourses().remove(this);
-    }
-
-    public void addRegistration(Registration registration) {
-        registrations.add(registration);
-        registration.setCourse(this);
-    }
-
-    public void removeRegistration(Registration registration) {
-        registrations.remove(registration);
-        registration.setCourse(null);
-    }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Course)) return false;
-        Course course = (Course) o;
-        return id != null && id.equals(course.id);
+        if (o == null || getClass() != o.getClass()) return false;
+        Course that = (Course) o;
+        return Objects.equals(courseId, that.courseId);
     }
-
+    
     @Override
     public int hashCode() {
-        return getClass().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", credits=" + credits +
-                ", duration=" + duration +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+        return Objects.hash(courseId);
     }
 }
