@@ -82,18 +82,31 @@ Total students: 3
 
 ---
 
-### Lab 3: Spring Boot Basics (Coming Soon)
+### Lab 3: Spring Boot Basics ✅ COMPLETE
 **Branch:** `lab/springboot-3-basics`
 
-**Focus:** Introduction to Spring Boot framework
+**Focus:** Introduction to Spring Boot framework and dependency injection
 
-**Topics:**
-- Spring Boot project setup
-- Dependency injection
-- Spring annotations (@Component, @Service, @Repository)
-- Application properties
-- Logging configuration
-- Spring Boot testing
+**What You'll Learn:**
+- Spring Boot auto-configuration
+- Dependency injection and IoC (Inversion of Control)
+- @SpringBootApplication annotation
+- @Service and @Configuration annotations
+- @Bean creation and management
+- Service layer pattern
+- Spring Boot testing with @SpringBootTest
+- Component scanning
+- Exception handling in services
+
+**Key Components:**
+- `OnlineSchoolApplication.java` - Spring Boot main class
+- `AppConfig.java` - Spring configuration with @Bean
+- `StudentService.java` - Service layer with dependency injection
+- `CourseService.java` - Service layer with in-memory storage
+- `StudentServiceTest.java` - 9 Spring Boot integration tests
+- `CourseServiceTest.java` - 11 Spring Boot integration tests
+
+**Test Results:** 20/20 tests passing ✅
 
 ---
 
