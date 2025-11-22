@@ -112,18 +112,53 @@ Total students: 3
 
 ---
 
-### Lab 5: ORM & JPA (Coming Soon)
+### Lab 5: ORM & JPA (In Progress)
 **Branch:** `lab/orm-5-jpa`
 
 **Focus:** Object-Relational Mapping with JPA/Hibernate
 
-**Topics:**
-- JPA entities and annotations
-- Entity relationships (One-to-Many, Many-to-Many)
-- Repository pattern
-- CRUD operations
-- Query methods
-- Entity lifecycle
+**What You'll Learn:**
+- JPA entity configuration and mapping
+- Entity relationships (Many-to-Many with Student-Course)
+- Spring Data JPA repository pattern
+- Custom query methods and JPQL
+- Entity lifecycle management (transient, managed, removed)
+- Cascade operations and relationship management
+- Transaction management with @Transactional
+- Entity validation with constraints
+- Database initialization and schema management
+- Repository and service layer testing
+
+**Key Components:**
+- `Student.java` - JPA entity with Many-to-Many relationship
+- `Course.java` - JPA entity with Many-to-Many relationship
+- `StudentRepository.java` - Spring Data JPA repository with custom queries
+- `CourseRepository.java` - Spring Data JPA repository with custom queries
+- `StudentService.java` - Service layer with business logic
+- `CourseService.java` - Service layer with business logic
+- 75+ tests covering entities, repositories, services, and integration
+
+**How to Run:**
+```bash
+# Build and run tests
+mvn clean test
+
+# Run application
+mvn spring-boot:run
+
+# Access H2 console
+http://localhost:8080/h2-console
+```
+
+**Expected Output:**
+```
+Tests run: 75+, Failures: 0, Errors: 0, Skipped: 0
+All tests passing ✅
+```
+
+**Test Results:** 75+ tests passing ✅
+
+**Documentation:** See `LAB_5_ORM_JPA.md` for detailed guide
 
 ---
 
