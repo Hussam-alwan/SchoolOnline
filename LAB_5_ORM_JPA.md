@@ -17,6 +17,7 @@ By completing this lab, you will understand:
 - **Cascade Operations:** How to manage related entity operations automatically
 - **Validation:** How to apply constraints to entities and prevent invalid data persistence
 - **Testing:** How to test repositories and services with @DataJpaTest and @SpringBootTest
+- **Database Schema:** How to manage database schema generation and initialization
 
 ## Technology Stack
 
@@ -77,7 +78,7 @@ src/
 
 ### 1. JPA Entities
 
-Entities are Java classes that represent tables in the database. They use annotations to define the mapping:
+Entities are Java classes that represent tables in the database:
 
 ```java
 @Entity
@@ -210,6 +211,18 @@ public class Student {
     @Max(4.0)
     private Double gpa;
 }
+```
+
+### 8. Query Methods
+
+Spring Data JPA generates queries from method names:
+
+```java
+// Method naming conventions
+findByEmail(String email)                    // WHERE email = ?
+findByNameContainingIgnoreCase(String name) // WHERE LOWER(name) LIKE ?
+findByCourses_Id(Long courseId)             // WHERE courses.id = ?
+findByGpaGreaterThanEqual(Double gpa)       // WHERE gpa >= ?
 ```
 
 ## Getting Started
@@ -376,6 +389,9 @@ public class StudentRepositoryTest {
 ### Issue: "Transaction rolled back because it has been marked as rollback-only"
 **Solution:** A constraint violation or exception occurred. Check the logs for the root cause and fix the data.
 
+### Issue: "No property found for type Student"
+**Solution:** Ensure entity class is properly annotated with @Entity and has proper getters/setters.
+
 ## Best Practices
 
 1. **Use DTOs for API responses** - Don't expose entities directly
@@ -388,6 +404,31 @@ public class StudentRepositoryTest {
 8. **Test relationships thoroughly** - Bidirectional consistency is important
 9. **Handle empty Optional properly** - Use orElseThrow() or orElse()
 10. **Monitor SQL queries** - Enable logging to see generated SQL
+
+## Configuration
+
+### Application Properties
+
+```properties
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# H2 Console
+spring.h2.console.enabled=true
+
+# Database
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# Logging
+logging.level.com.bootcamp.onlineschool=DEBUG
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+```
 
 ## Lab Progression
 
@@ -417,6 +458,8 @@ git checkout lab/orm-5-jpa
 git checkout lab/java-1-fundamentals
 git checkout lab/junit-2-testing
 git checkout lab/springboot-3-basics
+git checkout lab/api-6-backend
+git checkout lab/maven-7-build
 ```
 
 ## Resources
@@ -426,6 +469,7 @@ git checkout lab/springboot-3-basics
 - [Spring Data JPA Reference](https://spring.io/projects/spring-data-jpa)
 - [Spring Boot Data JPA Guide](https://spring.io/guides/gs/accessing-data-jpa/)
 - [H2 Database Documentation](https://www.h2database.com/)
+- [Jakarta Persistence API](https://jakarta.ee/specifications/persistence/3.1/)
 
 ## Next Steps
 
@@ -434,6 +478,7 @@ git checkout lab/springboot-3-basics
 3. Execute tasks from `.kiro/specs/lab-5-orm-jpa/tasks.md`
 4. Run tests frequently: `mvn clean test`
 5. Verify the application runs: `mvn spring-boot:run`
+6. Access H2 console: `http://localhost:8080/h2-console`
 
 ---
 
