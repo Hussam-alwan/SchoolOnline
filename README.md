@@ -21,11 +21,18 @@ Lab 3 focuses on Spring Boot fundamentals without database integration. This lab
 - **Spring Boot:** 3.2.0
   - spring-boot-starter-web: 3.2.0 (REST APIs and embedded Tomcat)
   - spring-boot-starter-test: 3.2.0 (Testing framework)
-- **Spring Framework:** 6.1.1 (included with Spring Boot)
-- **Tomcat:** 10.1.13 (embedded server)
-- **JUnit 5:** 5.9.3 (included with Spring Boot Test)
-- **Mockito:** 5.2.0 (included with Spring Boot Test)
+- **Spring Framework:** 6.1.1 (included with Spring Boot 3.2.0)
+- **Embedded Server:** Tomcat 10.1.13
+- **Testing Libraries (included with spring-boot-starter-test):**
+  - JUnit 5: 5.9.3
+  - Mockito: 5.2.0
+  - AssertJ: 3.24.2
+  - Hamcrest: 2.2
 - **Maven:** 3.6 or higher
+- **Maven Plugins:**
+  - spring-boot-maven-plugin: 3.2.0
+  - maven-compiler-plugin: 3.11.0
+  - maven-surefire-plugin: 3.1.2
 
 ## Getting Started
 
