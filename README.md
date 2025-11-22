@@ -1,55 +1,64 @@
-# Online School Backend
+# Online School Backend - Lab 3: Spring Boot Basics
 
-A Spring Boot backend service for an online school management system designed to teach bootcamp students.
+A Spring Boot backend service designed to teach fundamental Spring Boot concepts, REST API development, and service layer architecture.
 
-## Features
+## Lab Overview
 
-- Student and Teacher management (both inherit from User entity)
-- Course and Class management
-- Student registration system
-- RESTful APIs for all entities
-- H2 in-memory database for development
-- Comprehensive API documentation with Swagger
+Lab 3 focuses on Spring Boot fundamentals without database integration. This lab covers:
+
+- Spring Boot application setup and configuration
+- Dependency injection and component scanning
+- REST API development with Spring Web
+- Service layer architecture
+- Request/response handling
+- Exception handling and error responses
+- Student and course management services
+- Integration testing with Spring Boot Test
 
 ## Technology Stack
 
-- Java 17
-- Spring Boot 3.2.0
-- Spring Data JPA
-- H2 Database
-- Maven
-- Swagger/OpenAPI
+- **Java:** 21
+- **Spring Boot:** 3.2.0
+  - spring-boot-starter-web: 3.2.0 (REST APIs and embedded Tomcat)
+  - spring-boot-starter-test: 3.2.0 (Testing framework)
+- **Spring Framework:** 6.1.1 (included with Spring Boot)
+- **Tomcat:** 10.1.13 (embedded server)
+- **JUnit 5:** 5.9.3 (included with Spring Boot Test)
+- **Mockito:** 5.2.0 (included with Spring Boot Test)
+- **Maven:** 3.6 or higher
 
 ## Getting Started
 
 ### Prerequisites
 
-- Java 17 or higher
+- Java 21 or higher
 - Maven 3.6 or higher
 
 ### Running the Application
 
-1. Clone the repository
-2. Navigate to the project directory
-3. Run the application:
-   ```bash
-   mvn spring-boot:run
-   ```
+Start the application:
+```bash
+mvn spring-boot:run
+```
 
 The application will start on `http://localhost:8080`
 
-### H2 Database Console
+### Running Tests
 
-Access the H2 database console at: `http://localhost:8080/h2-console`
+Run all tests:
+```bash
+mvn clean test
+```
 
-- JDBC URL: `jdbc:h2:mem:testdb`
-- Username: `sa`
-- Password: `password`
+Run specific test class:
+```bash
+mvn test -Dtest=StudentServiceTest
+```
 
-### API Documentation
-
-Once the application is running, access the Swagger UI at:
-`http://localhost:8080/swagger-ui.html`
+Run with verbose output:
+```bash
+mvn test -X
+```
 
 ## Project Structure
 
@@ -59,14 +68,100 @@ src/
 │   ├── java/com/bootcamp/onlineschool/
 │   │   ├── OnlineSchoolApplication.java
 │   │   ├── controller/
+│   │   │   ├── StudentController.java
+│   │   │   └── CourseController.java
 │   │   ├── service/
-│   │   ├── repository/
+│   │   │   ├── StudentService.java
+│   │   │   └── CourseService.java
 │   │   ├── entity/
+│   │   │   ├── Student.java
+│   │   │   ├── Course.java
+│   │   │   ├── Teacher.java
+│   │   │   └── User.java
 │   │   ├── dto/
-│   │   └── exception/
+│   │   │   ├── StudentDTO.java
+│   │   │   └── CourseDTO.java
+│   │   ├── exception/
+│   │   │   └── GlobalExceptionHandler.java
+│   │   └── config/
+│   │       └── AppConfig.java
 │   └── resources/
 │       └── application.properties
 └── test/
     └── java/com/bootcamp/onlineschool/
-        └── OnlineSchoolApplicationTests.java
+        └── service/
+            ├── StudentServiceTest.java
+            └── CourseServiceTest.java
+```
+
+## Key Spring Boot Concepts Covered
+
+### Core Concepts
+- **Spring Application Context:** Dependency injection container
+- **Component Scanning:** Auto-discovery of Spring components
+- **Dependency Injection:** Constructor and field injection
+- **Bean Lifecycle:** Creation, initialization, and destruction
+
+### REST API Development
+- **@RestController:** REST endpoint definition
+- **@RequestMapping/@GetMapping/@PostMapping:** HTTP method mapping
+- **@PathVariable/@RequestParam:** Request parameter handling
+- **@RequestBody/@ResponseBody:** Request/response serialization
+- **HTTP Status Codes:** Proper response status handling
+
+### Service Layer
+- **@Service:** Service component annotation
+- **Business Logic:** Separation of concerns
+- **Data Transfer Objects (DTOs):** Request/response models
+- **Exception Handling:** Custom exceptions and global handlers
+
+### Testing
+- **@SpringBootTest:** Integration testing
+- **@MockBean:** Mocking Spring beans
+- **TestRestTemplate:** REST client for testing
+- **Assertions:** Validating responses and behavior
+
+## Test Coverage
+
+- **StudentServiceTest:** 9 tests covering student service operations
+- **CourseServiceTest:** 11 tests covering course service operations
+
+**Total:** 20 tests
+
+## Building the Project
+
+Build the project:
+```bash
+mvn clean build
+```
+
+Build without running tests:
+```bash
+mvn clean build -DskipTests
+```
+
+Compile only:
+```bash
+mvn clean compile
+```
+
+## Lab Progression
+
+This is **Lab 3** of the bootcamp curriculum:
+
+- **Lab 1:** Java Fundamentals - Core Java and OOP
+- **Lab 2:** JUnit Testing - Advanced testing patterns
+- **Lab 3:** Spring Boot Basics - REST APIs and services (current)
+- **Lab 4:** Database & SQL - JPA and database operations
+
+To switch to other labs:
+```bash
+# Lab 1
+git checkout lab/java-1-fundamentals
+
+# Lab 2
+git checkout lab/junit-2-testing
+
+# Lab 4
+git checkout lab/database-4-sql
 ```
