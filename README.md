@@ -1,72 +1,130 @@
-# Online School Backend
+# Online School Backend - Lab 1: Java Fundamentals
 
-A Spring Boot backend service for an online school management system designed to teach bootcamp students.
+A Java-based bootcamp project designed to teach core Java concepts, object-oriented programming principles, and fundamental data structures.
 
-## Features
+## Lab Overview
 
-- Student and Teacher management (both inherit from User entity)
-- Course and Class management
-- Student registration system
-- RESTful APIs for all entities
-- H2 in-memory database for development
-- Comprehensive API documentation with Swagger
+Lab 1 focuses on Java fundamentals without Spring Boot or database dependencies. This lab covers:
+
+- Core Java concepts and syntax
+- Object-oriented programming (OOP) principles
+- Classes, inheritance, and polymorphism
+- Collections and data structures
+- Unit testing with JUnit 5
+- Student registry system implementation
 
 ## Technology Stack
 
-- Java 17
-- Spring Boot 3.2.0
-- Spring Data JPA
-- H2 Database
-- Maven
-- Swagger/OpenAPI
+- **Java:** 21
+- **JUnit 5:** 5.10.0 (Testing framework)
+- **Maven Compiler Plugin:** 3.11.0
+- **Maven Surefire Plugin:** 3.1.2 (Test runner)
+- **Maven:** 3.6 or higher
 
 ## Getting Started
 
 ### Prerequisites
 
-- Java 17 or higher
+- Java 21 or higher
 - Maven 3.6 or higher
 
-### Running the Application
+### Running Tests
 
-1. Clone the repository
-2. Navigate to the project directory
-3. Run the application:
-   ```bash
-   mvn spring-boot:run
-   ```
+Run all tests:
+```bash
+mvn clean test
+```
 
-The application will start on `http://localhost:8080`
+Run specific test class:
+```bash
+mvn test -Dtest=StudentTest
+```
 
-### H2 Database Console
-
-Access the H2 database console at: `http://localhost:8080/h2-console`
-
-- JDBC URL: `jdbc:h2:mem:testdb`
-- Username: `sa`
-- Password: `password`
-
-### API Documentation
-
-Once the application is running, access the Swagger UI at:
-`http://localhost:8080/swagger-ui.html`
+Run with verbose output:
+```bash
+mvn test -X
+```
 
 ## Project Structure
 
 ```
 src/
 ├── main/
-│   ├── java/com/bootcamp/onlineschool/
-│   │   ├── OnlineSchoolApplication.java
-│   │   ├── controller/
-│   │   ├── service/
-│   │   ├── repository/
-│   │   ├── entity/
-│   │   ├── dto/
-│   │   └── exception/
-│   └── resources/
-│       └── application.properties
+│   └── java/com/bootcamp/onlineschool/
+│       ├── model/
+│       │   ├── Student.java
+│       │   ├── Teacher.java
+│       │   └── User.java
+│       └── registry/
+│           └── StudentRegistry.java
 └── test/
     └── java/com/bootcamp/onlineschool/
-        └── OnlineSchoolApplicationTests.java
+        ├── model/
+        │   └── StudentTest.java
+        └── StudentRegistryTest.java
+```
+
+## Key Concepts Covered
+
+### Object-Oriented Programming
+- **Encapsulation:** Private fields with public getters/setters
+- **Inheritance:** User base class with Student and Teacher subclasses
+- **Polymorphism:** Method overriding and interface implementation
+- **Abstraction:** Abstract classes and interfaces
+
+### Collections & Data Structures
+- ArrayList for dynamic collections
+- HashMap for key-value storage
+- Streams API for functional programming
+- Sorting and filtering operations
+
+### Testing
+- Unit testing with JUnit 5
+- Test organization with nested test classes
+- Parameterized tests
+- Assertions and test fixtures
+
+## Test Coverage
+
+- **StudentTest:** 7 tests covering Student model functionality
+- **StudentRegistryTest:** 12 tests covering registry operations
+
+**Total:** 19 tests
+
+## Building the Project
+
+Build the project:
+```bash
+mvn clean build
+```
+
+Build without running tests:
+```bash
+mvn clean build -DskipTests
+```
+
+Compile only:
+```bash
+mvn clean compile
+```
+
+## Lab Progression
+
+This is **Lab 1** of the bootcamp curriculum:
+
+- **Lab 1:** Java Fundamentals (current)
+- **Lab 2:** JUnit Testing - Advanced testing patterns
+- **Lab 3:** Spring Boot Basics - REST APIs and services
+- **Lab 4:** Database & SQL - JPA and database operations
+
+To switch to other labs:
+```bash
+# Lab 2
+git checkout lab/junit-2-testing
+
+# Lab 3
+git checkout lab/springboot-3-basics
+
+# Lab 4
+git checkout lab/database-4-sql
 ```
