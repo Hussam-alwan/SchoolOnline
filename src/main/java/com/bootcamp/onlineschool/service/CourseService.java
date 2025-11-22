@@ -1,279 +1,117 @@
 package com.bootcamp.onlineschool.service;
 
-import com.bootcamp.onlineschool.dto.CourseDTO;
-import com.bootcamp.onlineschool.entity.Course;
-import com.bootcamp.onlineschool.exception.ResourceNotFoundException;
-import com.bootcamp.onlineschool.exception.ValidationException;
-import com.bootcamp.onlineschool.repository.CourseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bootcamp.onlineschool.model.Course;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
- * Service class for managing Course entities
- * Provides CRUD operations and business logic validation
+ * CourseService demonstrates Spring Boot service with in-memory storage
+ * 
+ * Demonstrates:
+ * - @Service annotation
+ * - In-memory data management
+ * - Business logic methods
+ * - Exception handling
  */
 @Service
-@Transactional
 public class CourseService {
-
-    private final CourseRepository courseRepository;
-
-    @Autowired
-    public CourseService(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
-
+    
+    private final Map<String, Course> courses = new HashMap<>();
+    
     /**
      * Create a new course
-     * @param courseDTO the course data
-     * @return the created course
-     * @throws ValidationException if validation fails
      */
-    public CourseDTO create(CourseDTO courseDTO) {
-        validateCourseForCreation(courseDTO);
-        
-        Course course = courseDTO.toEntity();
-        Course savedCourse = courseRepository.save(course);
-        return CourseDTO.fromEntity(savedCourse);
-    }
-
-    /**
-     * Retrieve all courses
-     * @return List of all courses as DTOs
-     */
-    @Transactional(readOnly = true)
-    public List<CourseDTO> findAll() {
-        return courseRepository.findAll().stream()
-                .map(CourseDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Find course by ID
-     * @param id the course ID
-     * @return the course DTO if found
-     * @throws ResourceNotFoundException if course not found
-     */
-    @Transactional(readOnly = true)
-    public CourseDTO findById(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
-        return CourseDTO.fromEntity(course);
-    }
-
-    /**
-     * Find course by name
-     * @param name the course name
-     * @return Optional containing the course DTO if found
-     */
-    @Transactional(readOnly = true)
-    public Optional<CourseDTO> findByName(String name) {
-        validateCourseName(name);
-        return courseRepository.findByName(name)
-                .map(CourseDTO::fromEntity);
-    }
-
-    /**
-     * Find courses by credits
-     * @param credits the number of credits
-     * @return List of courses with the specified credits
-     */
-    @Transactional(readOnly = true)
-    public List<CourseDTO> findByCredits(Integer credits) {
-        validateCredits(credits);
-        return courseRepository.findByCredits(credits).stream()
-                .map(CourseDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Find courses by duration
-     * @param duration the duration in hours
-     * @return List of courses with the specified duration
-     */
-    @Transactional(readOnly = true)
-    public List<CourseDTO> findByDuration(Integer duration) {
-        validateDuration(duration);
-        return courseRepository.findByDuration(duration).stream()
-                .map(CourseDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Find courses by credits OR duration
-     * @param credits the number of credits
-     * @param duration the duration in hours
-     * @return List of courses matching either criteria
-     */
-    @Transactional(readOnly = true)
-    public List<CourseDTO> findByCreditsOrDuration(Integer credits, Integer duration) {
-        if (credits != null) {
-            validateCredits(credits);
-        }
-        if (duration != null) {
-            validateDuration(duration);
-        }
-        if (credits == null && duration == null) {
-            throw new ValidationException("At least one of credits or duration must be provided");
+    public Course createCourse(String courseId, String courseName, int credits, 
+                               String instructor, int maxStudents) {
+        if (courses.containsKey(courseId)) {
+            throw new CourseAlreadyExistsException("Course already exists: " + courseId);
         }
         
-        return courseRepository.findCoursesByCreditsOrDuration(credits, duration).stream()
-                .map(CourseDTO::fromEntity)
-                .collect(Collectors.toList());
+        Course course = new Course(courseId, courseName, credits, instructor, maxStudents);
+        courses.put(courseId, course);
+        return course;
     }
-
+    
     /**
-     * Find courses by minimum credits
-     * @param minCredits the minimum number of credits
-     * @return List of courses with at least the specified credits
+     * Get course by ID
      */
-    @Transactional(readOnly = true)
-    public List<CourseDTO> findByMinCredits(Integer minCredits) {
-        validateCredits(minCredits);
-        return courseRepository.findByCreditsGreaterThanEqual(minCredits).stream()
-                .map(CourseDTO::fromEntity)
-                .collect(Collectors.toList());
+    public Course getCourseById(String courseId) {
+        Course course = courses.get(courseId);
+        if (course == null) {
+            throw new CourseNotFoundException("Course not found: " + courseId);
+        }
+        return course;
     }
-
+    
     /**
-     * Find courses by maximum duration
-     * @param maxDuration the maximum duration
-     * @return List of courses with duration less than or equal to the specified value
+     * Get all courses
      */
-    @Transactional(readOnly = true)
-    public List<CourseDTO> findByMaxDuration(Integer maxDuration) {
-        validateDuration(maxDuration);
-        return courseRepository.findByDurationLessThanEqual(maxDuration).stream()
-                .map(CourseDTO::fromEntity)
-                .collect(Collectors.toList());
+    public List<Course> getAllCourses() {
+        return new ArrayList<>(courses.values());
     }
-
+    
     /**
-     * Update an existing course
-     * @param id the course ID
-     * @param courseDTO the updated course data
-     * @return the updated course DTO
-     * @throws ResourceNotFoundException if course not found
-     * @throws ValidationException if validation fails
+     * Enroll student in course
      */
-    public CourseDTO update(Long id, CourseDTO courseDTO) {
-        Course existingCourse = courseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
-        
-        validateCourseForUpdate(courseDTO, existingCourse);
-        
-        // Update fields
-        existingCourse.setName(courseDTO.getName());
-        existingCourse.setDescription(courseDTO.getDescription());
-        existingCourse.setCredits(courseDTO.getCredits());
-        existingCourse.setDuration(courseDTO.getDuration());
-        
-        Course savedCourse = courseRepository.save(existingCourse);
-        return CourseDTO.fromEntity(savedCourse);
+    public boolean enrollStudent(String courseId) {
+        Course course = getCourseById(courseId);
+        return course.enrollStudent();
     }
-
+    
     /**
-     * Delete course by ID
-     * @param id the course ID
-     * @throws ResourceNotFoundException if course not found
-     * @throws ValidationException if course has registrations
+     * Unenroll student from course
      */
-    public void deleteById(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
-        
-        // Check if course has registrations
-        if (!course.getRegistrations().isEmpty()) {
-            throw new ValidationException("Cannot delete course with existing registrations. Please remove registrations first.");
-        }
-        
-        courseRepository.delete(course);
+    public boolean unenrollStudent(String courseId) {
+        Course course = getCourseById(courseId);
+        return course.unenrollStudent();
     }
-
+    
     /**
-     * Check if course exists by name
-     * @param name the course name
-     * @return true if course exists, false otherwise
+     * Get available courses (not full)
      */
-    @Transactional(readOnly = true)
-    public boolean existsByName(String name) {
-        validateCourseName(name);
-        return courseRepository.existsByName(name);
+    public List<Course> getAvailableCourses() {
+        return courses.values().stream()
+                .filter(c -> !c.isFull())
+                .toList();
     }
-
-    // Private validation methods
-
-    private void validateCourseForCreation(CourseDTO courseDTO) {
-        if (courseDTO == null) {
-            throw new ValidationException("Course data cannot be null");
-        }
-
-        validateRequiredFields(courseDTO);
-
-        // Check for duplicate course name
-        if (courseRepository.existsByName(courseDTO.getName())) {
-            throw new ValidationException("Course name already exists: " + courseDTO.getName());
-        }
+    
+    /**
+     * Update course instructor
+     */
+    public void updateInstructor(String courseId, String newInstructor) {
+        Course course = getCourseById(courseId);
+        course.setInstructor(newInstructor);
     }
-
-    private void validateCourseForUpdate(CourseDTO courseDTO, Course existingCourse) {
-        if (courseDTO == null) {
-            throw new ValidationException("Course data cannot be null");
-        }
-
-        validateRequiredFields(courseDTO);
-
-        // Check if name is being changed to an existing one
-        if (!existingCourse.getName().equals(courseDTO.getName())) {
-            if (courseRepository.existsByName(courseDTO.getName())) {
-                throw new ValidationException("Course name already exists: " + courseDTO.getName());
-            }
-        }
+    
+    /**
+     * Delete course
+     */
+    public boolean deleteCourse(String courseId) {
+        return courses.remove(courseId) != null;
     }
-
-    private void validateRequiredFields(CourseDTO courseDTO) {
-        if (courseDTO.getName() == null || courseDTO.getName().trim().isEmpty()) {
-            throw new ValidationException("Course name is required");
-        }
-
-        if (courseDTO.getCredits() == null) {
-            throw new ValidationException("Credits is required");
-        }
-
-        if (courseDTO.getDuration() == null) {
-            throw new ValidationException("Duration is required");
-        }
-
-        validateCredits(courseDTO.getCredits());
-        validateDuration(courseDTO.getDuration());
+    
+    /**
+     * Get total number of courses
+     */
+    public int getTotalCourses() {
+        return courses.size();
     }
-
-    private void validateCourseName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new ValidationException("Course name cannot be null or empty");
+    
+    /**
+     * Custom exception for course not found
+     */
+    public static class CourseNotFoundException extends RuntimeException {
+        public CourseNotFoundException(String message) {
+            super(message);
         }
     }
-
-    private void validateCredits(Integer credits) {
-        if (credits == null) {
-            throw new ValidationException("Credits cannot be null");
-        }
-        if (credits < 1) {
-            throw new ValidationException("Credits must be at least 1");
-        }
-    }
-
-    private void validateDuration(Integer duration) {
-        if (duration == null) {
-            throw new ValidationException("Duration cannot be null");
-        }
-        if (duration < 1) {
-            throw new ValidationException("Duration must be at least 1");
+    
+    /**
+     * Custom exception for course already exists
+     */
+    public static class CourseAlreadyExistsException extends RuntimeException {
+        public CourseAlreadyExistsException(String message) {
+            super(message);
         }
     }
 }

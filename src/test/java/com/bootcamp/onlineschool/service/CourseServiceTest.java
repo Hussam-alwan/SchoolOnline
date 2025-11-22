@@ -1,333 +1,159 @@
 package com.bootcamp.onlineschool.service;
 
-import com.bootcamp.onlineschool.dto.CourseDTO;
-import com.bootcamp.onlineschool.entity.Course;
-import com.bootcamp.onlineschool.exception.ResourceNotFoundException;
-import com.bootcamp.onlineschool.exception.ValidationException;
-import com.bootcamp.onlineschool.repository.CourseRepository;
+import com.bootcamp.onlineschool.model.Course;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.DisplayName;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class CourseServiceTest {
-
-    @Mock
-    private CourseRepository courseRepository;
-
-    @InjectMocks
+/**
+ * CourseService tests demonstrating Spring Boot service testing
+ * 
+ * Demonstrates:
+ * - @SpringBootTest for integration testing
+ * - Service dependency injection
+ * - Testing business logic
+ * - Exception handling in services
+ */
+@SpringBootTest
+@DisplayName("CourseService Tests")
+public class CourseServiceTest {
+    
+    @Autowired
     private CourseService courseService;
-
-    private Course testCourse;
-    private CourseDTO testCourseDTO;
-
+    
     @BeforeEach
-    void setUp() {
-        testCourse = new Course("Mathematics 101", "Introduction to Mathematics", 3, 45);
-        testCourse.setId(1L);
-        testCourse.setCreatedAt(LocalDateTime.now());
-        testCourse.setUpdatedAt(LocalDateTime.now());
-        testCourse.setRegistrations(new HashSet<>());
-
-        testCourseDTO = new CourseDTO("Mathematics 101", "Introduction to Mathematics", 3, 45);
-        testCourseDTO.setId(1L);
+    public void setUp() {
+        // Clear courses before each test by deleting all existing courses
+        courseService.getAllCourses().stream()
+            .map(c -> c.getCourseId())
+            .forEach(id -> courseService.deleteCourse(id));
     }
-
+    
     @Test
-    void create_WhenValidData_ShouldCreateCourse() {
-        // Given
-        when(courseRepository.existsByName("Mathematics 101")).thenReturn(false);
-        when(courseRepository.save(any(Course.class))).thenReturn(testCourse);
-
-        // When
-        CourseDTO result = courseService.create(testCourseDTO);
-
-        // Then
-        assertNotNull(result);
-        assertEquals("Mathematics 101", result.getName());
-        assertEquals("Introduction to Mathematics", result.getDescription());
-        assertEquals(3, result.getCredits());
-        assertEquals(45, result.getDuration());
-        verify(courseRepository).existsByName("Mathematics 101");
-        verify(courseRepository).save(any(Course.class));
+    @DisplayName("Should create course successfully")
+    public void testCreateCourse() {
+        Course course = courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        
+        assertNotNull(course);
+        assertEquals("CS101", course.getCourseId());
+        assertEquals("Java Basics", course.getCourseName());
+        assertEquals(1, courseService.getTotalCourses());
     }
-
+    
     @Test
-    void create_WhenDuplicateName_ShouldThrowValidationException() {
-        // Given
-        when(courseRepository.existsByName("Mathematics 101")).thenReturn(true);
-
-        // When & Then
-        ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> courseService.create(testCourseDTO)
-        );
-        assertEquals("Course name already exists: Mathematics 101", exception.getMessage());
-        verify(courseRepository).existsByName("Mathematics 101");
-        verify(courseRepository, never()).save(any());
+    @DisplayName("Should throw exception when creating duplicate course")
+    public void testCreateDuplicateCourse() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        
+        assertThrows(CourseService.CourseAlreadyExistsException.class, 
+            () -> courseService.createCourse("CS101", "Different Name", 4, "Dr. Brown", 25));
     }
-
+    
     @Test
-    void create_WhenNullData_ShouldThrowValidationException() {
-        // When & Then
-        ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> courseService.create(null)
-        );
-        assertEquals("Course data cannot be null", exception.getMessage());
-        verify(courseRepository, never()).save(any());
+    @DisplayName("Should get course by ID")
+    public void testGetCourseById() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        
+        Course course = courseService.getCourseById("CS101");
+        assertNotNull(course);
+        assertEquals("Java Basics", course.getCourseName());
     }
-
+    
     @Test
-    void create_WhenNullCredits_ShouldThrowValidationException() {
-        // Given
-        testCourseDTO.setCredits(null);
-
-        // When & Then
-        ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> courseService.create(testCourseDTO)
-        );
-        assertEquals("Credits is required", exception.getMessage());
-        verify(courseRepository, never()).save(any());
+    @DisplayName("Should throw exception when course not found")
+    public void testGetNonExistentCourse() {
+        assertThrows(CourseService.CourseNotFoundException.class, 
+            () -> courseService.getCourseById("NONEXISTENT"));
     }
-
+    
     @Test
-    void create_WhenInvalidCredits_ShouldThrowValidationException() {
-        // Given
-        testCourseDTO.setCredits(0);
-
-        // When & Then
-        ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> courseService.create(testCourseDTO)
-        );
-        assertEquals("Credits must be at least 1", exception.getMessage());
-        verify(courseRepository, never()).save(any());
+    @DisplayName("Should get all courses")
+    public void testGetAllCourses() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        courseService.createCourse("CS102", "Advanced Java", 4, "Dr. Brown", 25);
+        courseService.createCourse("CS103", "Web Development", 3, "Dr. Johnson", 20);
+        
+        List<Course> courses = courseService.getAllCourses();
+        assertEquals(3, courses.size());
     }
-
+    
     @Test
-    void findAll_ShouldReturnAllCourses() {
-        // Given
-        List<Course> courses = Arrays.asList(testCourse);
-        when(courseRepository.findAll()).thenReturn(courses);
-
-        // When
-        List<CourseDTO> result = courseService.findAll();
-
-        // Then
-        assertEquals(1, result.size());
-        assertEquals("Mathematics 101", result.get(0).getName());
-        verify(courseRepository).findAll();
+    @DisplayName("Should enroll student in course")
+    public void testEnrollStudent() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        
+        boolean enrolled = courseService.enrollStudent("CS101");
+        assertTrue(enrolled);
+        
+        Course course = courseService.getCourseById("CS101");
+        assertEquals(1, course.getEnrolledStudents());
     }
-
+    
     @Test
-    void findById_WhenCourseExists_ShouldReturnCourse() {
-        // Given
-        when(courseRepository.findById(1L)).thenReturn(Optional.of(testCourse));
-
-        // When
-        CourseDTO result = courseService.findById(1L);
-
-        // Then
-        assertEquals("Mathematics 101", result.getName());
-        assertEquals(3, result.getCredits());
-        verify(courseRepository).findById(1L);
+    @DisplayName("Should not enroll when course is full")
+    public void testEnrollWhenFull() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 1);
+        
+        // Fill the course
+        courseService.enrollStudent("CS101");
+        
+        // Try to enroll another
+        boolean enrolled = courseService.enrollStudent("CS101");
+        assertFalse(enrolled);
     }
-
+    
     @Test
-    void findById_WhenCourseNotExists_ShouldThrowResourceNotFoundException() {
-        // Given
-        when(courseRepository.findById(1L)).thenReturn(Optional.empty());
-
-        // When & Then
-        ResourceNotFoundException exception = assertThrows(
-            ResourceNotFoundException.class,
-            () -> courseService.findById(1L)
-        );
-        assertEquals("Course not found with id: '1'", exception.getMessage());
-        verify(courseRepository).findById(1L);
+    @DisplayName("Should unenroll student from course")
+    public void testUnenrollStudent() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        courseService.enrollStudent("CS101");
+        
+        boolean unenrolled = courseService.unenrollStudent("CS101");
+        assertTrue(unenrolled);
+        
+        Course course = courseService.getCourseById("CS101");
+        assertEquals(0, course.getEnrolledStudents());
     }
-
+    
     @Test
-    void findByName_WhenValidName_ShouldReturnCourse() {
-        // Given
-        when(courseRepository.findByName("Mathematics 101")).thenReturn(Optional.of(testCourse));
-
-        // When
-        Optional<CourseDTO> result = courseService.findByName("Mathematics 101");
-
-        // Then
-        assertTrue(result.isPresent());
-        assertEquals("Mathematics 101", result.get().getName());
-        verify(courseRepository).findByName("Mathematics 101");
+    @DisplayName("Should get available courses")
+    public void testGetAvailableCourses() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 1);
+        courseService.createCourse("CS102", "Advanced Java", 4, "Dr. Brown", 30);
+        
+        // Fill CS101
+        courseService.enrollStudent("CS101");
+        
+        List<Course> available = courseService.getAvailableCourses();
+        assertEquals(1, available.size());
+        assertEquals("CS102", available.get(0).getCourseId());
     }
-
+    
     @Test
-    void findByName_WhenNullName_ShouldThrowValidationException() {
-        // When & Then
-        ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> courseService.findByName(null)
-        );
-        assertEquals("Course name cannot be null or empty", exception.getMessage());
-        verify(courseRepository, never()).findByName(any());
+    @DisplayName("Should update instructor")
+    public void testUpdateInstructor() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        
+        courseService.updateInstructor("CS101", "Dr. Johnson");
+        
+        Course course = courseService.getCourseById("CS101");
+        assertEquals("Dr. Johnson", course.getInstructor());
     }
-
+    
     @Test
-    void findByCredits_WhenValidCredits_ShouldReturnCourses() {
-        // Given
-        List<Course> courses = Arrays.asList(testCourse);
-        when(courseRepository.findByCredits(3)).thenReturn(courses);
-
-        // When
-        List<CourseDTO> result = courseService.findByCredits(3);
-
-        // Then
-        assertEquals(1, result.size());
-        assertEquals("Mathematics 101", result.get(0).getName());
-        verify(courseRepository).findByCredits(3);
-    }
-
-    @Test
-    void findByCredits_WhenNullCredits_ShouldThrowValidationException() {
-        // When & Then
-        ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> courseService.findByCredits(null)
-        );
-        assertEquals("Credits cannot be null", exception.getMessage());
-        verify(courseRepository, never()).findByCredits(any());
-    }
-
-    @Test
-    void findByCreditsOrDuration_WhenValidData_ShouldReturnCourses() {
-        // Given
-        List<Course> courses = Arrays.asList(testCourse);
-        when(courseRepository.findCoursesByCreditsOrDuration(3, 45)).thenReturn(courses);
-
-        // When
-        List<CourseDTO> result = courseService.findByCreditsOrDuration(3, 45);
-
-        // Then
-        assertEquals(1, result.size());
-        assertEquals("Mathematics 101", result.get(0).getName());
-        verify(courseRepository).findCoursesByCreditsOrDuration(3, 45);
-    }
-
-    @Test
-    void findByCreditsOrDuration_WhenBothNull_ShouldThrowValidationException() {
-        // When & Then
-        ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> courseService.findByCreditsOrDuration(null, null)
-        );
-        assertEquals("At least one of credits or duration must be provided", exception.getMessage());
-        verify(courseRepository, never()).findCoursesByCreditsOrDuration(any(), any());
-    }
-
-    @Test
-    void update_WhenValidData_ShouldUpdateCourse() {
-        // Given
-        CourseDTO updatedDTO = new CourseDTO("Physics 101", "Introduction to Physics", 4, 60);
-        when(courseRepository.findById(1L)).thenReturn(Optional.of(testCourse));
-        when(courseRepository.existsByName("Physics 101")).thenReturn(false);
-        when(courseRepository.save(any(Course.class))).thenReturn(testCourse);
-
-        // When
-        CourseDTO result = courseService.update(1L, updatedDTO);
-
-        // Then
-        assertEquals("Physics 101", testCourse.getName());
-        assertEquals("Introduction to Physics", testCourse.getDescription());
-        assertEquals(4, testCourse.getCredits());
-        assertEquals(60, testCourse.getDuration());
-        verify(courseRepository).findById(1L);
-        verify(courseRepository).save(testCourse);
-    }
-
-    @Test
-    void deleteById_WhenCourseHasNoRegistrations_ShouldDeleteCourse() {
-        // Given
-        testCourse.setRegistrations(new HashSet<>());
-        when(courseRepository.findById(1L)).thenReturn(Optional.of(testCourse));
-
-        // When
-        courseService.deleteById(1L);
-
-        // Then
-        verify(courseRepository).findById(1L);
-        verify(courseRepository).delete(testCourse);
-    }
-
-    @Test
-    void deleteById_WhenCourseNotExists_ShouldThrowResourceNotFoundException() {
-        // Given
-        when(courseRepository.findById(1L)).thenReturn(Optional.empty());
-
-        // When & Then
-        ResourceNotFoundException exception = assertThrows(
-            ResourceNotFoundException.class,
-            () -> courseService.deleteById(1L)
-        );
-        assertEquals("Course not found with id: '1'", exception.getMessage());
-        verify(courseRepository).findById(1L);
-        verify(courseRepository, never()).delete(any());
-    }
-
-    @Test
-    void existsByName_WhenValidName_ShouldReturnTrue() {
-        // Given
-        when(courseRepository.existsByName("Mathematics 101")).thenReturn(true);
-
-        // When
-        boolean result = courseService.existsByName("Mathematics 101");
-
-        // Then
-        assertTrue(result);
-        verify(courseRepository).existsByName("Mathematics 101");
-    }
-
-    @Test
-    void findByMinCredits_WhenValidCredits_ShouldReturnCourses() {
-        // Given
-        List<Course> courses = Arrays.asList(testCourse);
-        when(courseRepository.findByCreditsGreaterThanEqual(3)).thenReturn(courses);
-
-        // When
-        List<CourseDTO> result = courseService.findByMinCredits(3);
-
-        // Then
-        assertEquals(1, result.size());
-        assertEquals("Mathematics 101", result.get(0).getName());
-        verify(courseRepository).findByCreditsGreaterThanEqual(3);
-    }
-
-    @Test
-    void findByMaxDuration_WhenValidDuration_ShouldReturnCourses() {
-        // Given
-        List<Course> courses = Arrays.asList(testCourse);
-        when(courseRepository.findByDurationLessThanEqual(60)).thenReturn(courses);
-
-        // When
-        List<CourseDTO> result = courseService.findByMaxDuration(60);
-
-        // Then
-        assertEquals(1, result.size());
-        assertEquals("Mathematics 101", result.get(0).getName());
-        verify(courseRepository).findByDurationLessThanEqual(60);
+    @DisplayName("Should delete course")
+    public void testDeleteCourse() {
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        assertEquals(1, courseService.getTotalCourses());
+        
+        boolean deleted = courseService.deleteCourse("CS101");
+        assertTrue(deleted);
+        assertEquals(0, courseService.getTotalCourses());
     }
 }
