@@ -305,7 +305,7 @@ class PerformanceIntegrationTest {
                 registration.setStudentId(studentId);
                 registration.setCourseId(courseId);
                 registration.setRegistrationDate(LocalDate.now());
-                registration.setStatus("ENROLLED");
+                registration.setStatus("ACTIVE");
                 
                 mockMvc.perform(post("/api/registrations")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -321,7 +321,7 @@ class PerformanceIntegrationTest {
         List<Student> studentsInClass = studentRepository.findStudentsByClazzId(clazzId);
         
         // Query registrations by status
-        List<Registration> enrolledRegistrations = registrationRepository.findByStatus("ENROLLED");
+        List<Registration> enrolledRegistrations = registrationRepository.findByStatus("ACTIVE");
         
         long endTime = System.currentTimeMillis();
         long complexQueryTime = endTime - startTime;

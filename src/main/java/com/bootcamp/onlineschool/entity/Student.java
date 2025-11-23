@@ -24,7 +24,7 @@ public class Student extends User {
     @Column(name = "enrollment_date", nullable = false)
     private LocalDate enrollmentDate;
 
-    @ManyToMany(mappedBy = "students", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Clazz> classes = new HashSet<>();
 
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

@@ -2,7 +2,10 @@ package com.bootcamp.onlineschool.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -97,6 +100,60 @@ public class GlobalExceptionHandler {
                 .build();
         
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handle malformed JSON and message not readable exceptions
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
+            HttpMessageNotReadableException ex, WebRequest request) {
+        
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Bad Request")
+                .message("Malformed JSON request")
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handle HTTP method not supported exceptions
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException ex, WebRequest request) {
+        
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.METHOD_NOT_ALLOWED.value())
+                .error("Method Not Allowed")
+                .message("HTTP method not supported for this endpoint")
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * Handle unsupported media type exceptions
+     */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupportedException(
+            HttpMediaTypeNotSupportedException ex, WebRequest request) {
+        
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
+                .error("Unsupported Media Type")
+                .message("Content type not supported")
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
     /**

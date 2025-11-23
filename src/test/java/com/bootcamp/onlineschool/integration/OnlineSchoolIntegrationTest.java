@@ -100,7 +100,7 @@ class OnlineSchoolIntegrationTest {
 
         testRegistration = new RegistrationDTO();
         testRegistration.setRegistrationDate(LocalDate.now());
-        testRegistration.setStatus("ENROLLED");
+        testRegistration.setStatus("ACTIVE");
     }
 
     /**
@@ -211,7 +211,7 @@ class OnlineSchoolIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.studentId").value(studentId))
                 .andExpect(jsonPath("$.courseId").value(courseId))
-                .andExpect(jsonPath("$.status").value("ENROLLED"));
+                .andExpect(jsonPath("$.status").value("ACTIVE"));
 
         // Verify registration persistence
         List<Registration> registrations = registrationRepository.findByStudentId(studentId);
@@ -441,7 +441,7 @@ class OnlineSchoolIntegrationTest {
         registration.setStudentId(studentId);
         registration.setCourseId(courseId);
         registration.setRegistrationDate(LocalDate.now());
-        registration.setStatus("ENROLLED");
+        registration.setStatus("ACTIVE");
 
         MvcResult regResult = mockMvc.perform(post("/api/registrations")
                 .contentType(MediaType.APPLICATION_JSON)

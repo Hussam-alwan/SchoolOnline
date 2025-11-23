@@ -39,7 +39,7 @@ public class Course {
     @Column(nullable = false)
     private Integer duration;
 
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Clazz> classes = new HashSet<>();
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

@@ -45,7 +45,7 @@ public class Clazz {
     @NotNull(message = "Teacher is required")
     private Teacher teacher;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
         name = "class_students",
         joinColumns = @JoinColumn(name = "class_id"),
@@ -53,7 +53,7 @@ public class Clazz {
     )
     private Set<Student> students = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
         name = "class_courses",
         joinColumns = @JoinColumn(name = "class_id"),

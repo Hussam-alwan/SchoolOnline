@@ -119,7 +119,7 @@ class ApiErrorHandlingIntegrationTest {
         mockMvc.perform(get("/api/students/{id}", nonExistentId))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Student not found with id: " + nonExistentId));
+                .andExpect(jsonPath("$.message").value("Student not found with id: '" + nonExistentId + "'"));
 
         mockMvc.perform(put("/api/students/{id}", nonExistentId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -133,7 +133,7 @@ class ApiErrorHandlingIntegrationTest {
         mockMvc.perform(get("/api/teachers/{id}", nonExistentId))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Teacher not found with id: " + nonExistentId));
+                .andExpect(jsonPath("$.message").value("Teacher not found with id: '" + nonExistentId + "'"));
 
         mockMvc.perform(put("/api/teachers/{id}", nonExistentId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -147,19 +147,19 @@ class ApiErrorHandlingIntegrationTest {
         mockMvc.perform(get("/api/courses/{id}", nonExistentId))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Course not found with id: " + nonExistentId));
+                .andExpect(jsonPath("$.message").value("Course not found with id: '" + nonExistentId + "'"));
 
         // Test Class not found
         mockMvc.perform(get("/api/classes/{id}", nonExistentId))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Class not found with id: " + nonExistentId));
+                .andExpect(jsonPath("$.message").value("Class not found with id: '" + nonExistentId + "'"));
 
         // Test Registration not found
         mockMvc.perform(get("/api/registrations/{id}", nonExistentId))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Registration not found with id: " + nonExistentId));
+                .andExpect(jsonPath("$.message").value("Registration not found with id: '" + nonExistentId + "'"));
     }
 
     /**
@@ -377,7 +377,7 @@ class ApiErrorHandlingIntegrationTest {
     private RegistrationDTO createValidRegistrationDTO() {
         RegistrationDTO registration = new RegistrationDTO();
         registration.setRegistrationDate(LocalDate.now());
-        registration.setStatus("ENROLLED");
+        registration.setStatus("ACTIVE");
         return registration;
     }
 }
