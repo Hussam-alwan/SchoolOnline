@@ -27,16 +27,11 @@ public class SecurityConfig {
             .cors(cors -> {})
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/api/students/**").authenticated()
-                .requestMatchers("/api/courses/**").authenticated()
-                .requestMatchers("/api/classes/**").authenticated()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .httpBasic(basic -> {});
+                .requestMatchers("/h2-console/**").permitAll()
+                .anyRequest().permitAll()
+            );
         
         return http.build();
     }
