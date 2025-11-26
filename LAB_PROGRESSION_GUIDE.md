@@ -110,7 +110,7 @@ Total students: 3
 
 ---
 
-### Lab 4: Database & SQL (Coming Soon)
+### Lab 4: Database & SQL 
 **Branch:** `lab/database-4-sql`
 
 **Focus:** Database design and SQL fundamentals
@@ -125,7 +125,7 @@ Total students: 3
 
 ---
 
-### Lab 5: ORM & JPA (Coming Soon)
+### Lab 5: ORM & JPA 
 **Branch:** `lab/orm-5-jpa`
 
 **Focus:** Object-Relational Mapping with JPA/Hibernate
@@ -140,7 +140,7 @@ Total students: 3
 
 ---
 
-### Lab 6: Backend API (Coming Soon)
+### Lab 6: Backend API 
 **Branch:** `lab/api-6-backend`
 
 **Focus:** RESTful API development with Spring Boot
@@ -155,7 +155,7 @@ Total students: 3
 
 ---
 
-### Lab 7: Maven & Build Tools (Coming Soon)
+### Lab 7: Maven & Build Tools 
 **Branch:** `lab/maven-7-build`
 
 **Focus:** Maven project management and build automation
@@ -170,7 +170,7 @@ Total students: 3
 
 ---
 
-### Lab 8: Frontend HTML & CSS (Coming Soon)
+### Lab 8: Frontend HTML & CSS 
 **Branch:** `lab/frontend-8-html-css`
 
 **Focus:** Frontend basics with HTML and CSS
@@ -185,7 +185,7 @@ Total students: 3
 
 ---
 
-### Lab 9: ReactJS (Coming Soon)
+### Lab 9: ReactJS 
 **Branch:** `lab/react-9-frontend`
 
 **Focus:** Modern frontend development with React
