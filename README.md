@@ -38,7 +38,7 @@ Lab 3 focuses on Spring Boot fundamentals without database integration. This lab
 
 ### Prerequisites
 
-- Java 21 or higher
+- Java 21 LTS or higher
 - Maven 3.6 or higher
 
 ### Running the Application
