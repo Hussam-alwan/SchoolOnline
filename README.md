@@ -25,7 +25,7 @@ Lab 1 focuses on Java fundamentals without Spring Boot or database dependencies.
 
 ### Prerequisites
 
-- Java 21 or higher
+- Java 21 LTS or higher
 - Maven 3.6 or higher
 
 ### Running Tests
