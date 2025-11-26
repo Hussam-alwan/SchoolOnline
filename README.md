@@ -29,7 +29,7 @@ Lab 2 focuses on advanced testing techniques and patterns without Spring Boot or
 
 ### Prerequisites
 
-- Java 21 or higher
+- Java 21 LTS or higher
 - Maven 3.6 or higher
 
 ### Running Tests
