@@ -211,4 +211,72 @@ public class StudentRegistryTest {
     public void testFindByEmailEmpty() {
         assertNull(registry.findByEmail(""));
     }
+
+    @Test
+    @DisplayName("Should find students by GPA range")
+    public void testFindByGpaRange() {
+        registry.addStudent(student1);
+        registry.addStudent(student2);
+        registry.addStudent(student3);
+
+        List<Student> result = registry.findStudentsByGpaRange(3.6, 3.9);
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    @DisplayName("Should Matches all student")
+    public void testMatchesAllStudent() {
+        registry.addStudent(student1);
+        registry.addStudent(student2);
+        registry.addStudent(student3);
+
+        List<Student> result = registry.findStudentsByGpaRange(0.0, 4.0);
+        assertEquals(3, result.size());
+    }
+
+    @Test
+    @DisplayName("Should return empty list when no matches")
+    public void testMatchesAllStudentEmpty() {
+        registry.addStudent(student1);
+        registry.addStudent(student2);
+        registry.addStudent(student3);
+        List<Student> result = registry.findStudentsByGpaRange(0.0, 1.0);
+
+        assertEquals(0, result.size());
+
+    }
+
+    @Test
+    @DisplayName("Should throw exception when min GPA is greater than max GPA")
+    public void testMinGPAGreaterThanMaxGPA() {
+        assertThrows(IllegalArgumentException.class, () -> registry.findStudentsByGpaRange(3.6, 2.0));
+    }
+
+    @Test
+    @DisplayName("Should find students by email domain")
+    public void testFindStudentsByEmailDomain() {
+        registry.addStudent(student1);
+        registry.addStudent(student2);
+        registry.addStudent(student3);
+
+        List<Student> result = registry.findStudentsByEmailDomain(student1.getEmail());
+
+        assertEquals(3, result.size());
+    }
+
+    @Test
+    @DisplayName("Should return empty list for null domain")
+    public void testFindStudentsByEmailDomainNull() {
+        registry.addStudent(student1);
+
+        List<Student> result = registry.findStudentsByEmailDomain(null);
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    @DisplayName("Should return empty list for empty registry")
+    public void testFindStudentsByGpaRangeEmptyRegistry() {
+        List<Student> result = registry.findStudentsByGpaRange(0.0, 4.0);
+        assertEquals(0, result.size());
+    }
 }

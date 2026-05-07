@@ -139,5 +139,20 @@ public class StudentRegistry {
         studentMap.clear();
     }
 
-
+    public List<Student> findStudentsByGpaRange(Double min, Double max) {
+        if (min>max){
+            throw new IllegalArgumentException("Min has to be greater than max");
+        }
+        return students.stream()
+                .filter(s -> s.getGpa() >= min && s.getGpa() <= max)
+                .toList();
+    }
+    public List<Student> findStudentsByEmailDomain(String domain){
+        if (domain==null||domain.isEmpty()){
+           return new ArrayList<>();
+        }
+        return students.stream()
+                .filter(s -> s.getEmail().endsWith("edu"))
+                .toList();
+    }
 }
