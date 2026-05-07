@@ -44,7 +44,23 @@ public class StudentTest {
         Student invalidStudent = new Student("STU002", "Jane Doe", "invalid-email");
         assertFalse(invalidStudent.isValidEmail());
     }
-    
+
+    @ParameterizedTest
+    @DisplayName("Should accept valid  emails")
+    @ValueSource(strings = {"student@school.edu", "john.doe@school.edu"})
+    public void testValidEmail(String email) {
+        Student s = new Student("STU002", "Jane Doe", email);
+        assertTrue(s.isValidEmail());
+    }
+
+    @ParameterizedTest
+    @DisplayName("Should reject invalid emails")
+    @ValueSource(strings = {"student@gmail.com", "student@school.com", "invalid"})
+    public void testInvalidEmail(String email) {
+        Student s = new Student("STU002", "Jane Doe", email);
+        assertFalse(s.isValidEmail());
+    }
+
     @Test
     @DisplayName("Should set and get GPA correctly")
     public void testGpaSetterGetter() {

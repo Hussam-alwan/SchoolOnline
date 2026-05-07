@@ -99,7 +99,7 @@ public class Student {
 
     // Validate email format
     public boolean isValidEmail() {
-        return email != null && email.contains("@") && email.contains(".");
+        return email != null && email.contains("@") && email.contains(".") && email.endsWith("@school.edu");
     }
     
     @Override
