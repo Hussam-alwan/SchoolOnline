@@ -39,7 +39,13 @@ public class OnlineSchoolApplication {
         if (found != null) {
             System.out.println("Found: " + found);
         }
-        
+
+        System.out.println("\nSearching for student with student1 Email ':");
+        Student found2 = registry.findByEmail(student1.getEmail());
+        if (found2 != null) {
+            System.out.println("Found: " + found2);
+        }
+
         // Count students
         System.out.println("\nTotal students: " + registry.getStudentCount());
     }

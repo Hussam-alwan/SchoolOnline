@@ -169,4 +169,46 @@ public class StudentRegistryTest {
         registry.clear();
         assertEquals(0, registry.getStudentCount());
     }
+
+    @Test
+    @DisplayName("Should find student by exact email")
+    public void testFindByEmail() {
+        registry.addStudent(student1);
+        registry.addStudent(student2);
+
+        Student found = registry.findByEmail("alice@school.edu");
+        assertNotNull(found);
+        assertEquals(student1.getEmail(), found.getEmail());
+    }
+
+    @Test
+    @DisplayName("Should find student by email case-insensitive")
+    public void testFindByEmailCaseInsensitive() {
+        registry.addStudent(student1);
+
+        Student found = registry.findByEmail("ALICE@SCHOOL.EDU");
+        assertNotNull(found);
+        assertEquals(student1.getEmail(), found.getEmail());
+    }
+
+    @Test
+    @DisplayName("Should return null for non-existent email")
+    public void testFindByEmailNotFound() {
+        registry.addStudent(student1);
+
+        Student found = registry.findByEmail("notfound@school.edu");
+        assertNull(found);
+    }
+
+    @Test
+    @DisplayName("Should return null for null email")
+    public void testFindByEmailNull() {
+        assertNull(registry.findByEmail(null));
+    }
+
+    @Test
+    @DisplayName("Should return null for empty email")
+    public void testFindByEmailEmpty() {
+        assertNull(registry.findByEmail(""));
+    }
 }

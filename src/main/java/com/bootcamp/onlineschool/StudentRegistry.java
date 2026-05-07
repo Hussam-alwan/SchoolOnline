@@ -46,6 +46,16 @@ public class StudentRegistry {
         }
         return false;
     }
+
+    public Student findByEmail(String email) {
+        if (email == null|| email.isEmpty()) {
+            return null;
+        }
+        return students.stream()
+                .filter(s -> s.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElse(null);
+    }
     
     /**
      * Find a student by ID
