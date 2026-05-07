@@ -28,9 +28,9 @@ public class StudentRegistryTest {
     @BeforeEach
     public void setUp() {
         registry = new StudentRegistry();
-        student1 = new Student("STU001", "Alice Johnson", "alice@school.edu", 3.8);
-        student2 = new Student("STU002", "Bob Smith", "bob@school.edu", 3.5);
-        student3 = new Student("STU003", "Charlie Brown", "charlie@school.edu", 3.9);
+        student1 = new Student("STU001", "Alice Johnson", "alice@school.edu", 3.8,17);
+        student2 = new Student("STU002", "Bob Smith", "bob@school.edu", 3.5,18);
+        student3 = new Student("STU003", "Charlie Brown", "charlie@school.edu", 3.9,19);
     }
     
     @Test

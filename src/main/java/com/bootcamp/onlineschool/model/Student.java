@@ -14,21 +14,41 @@ public class Student {
     private String name;
     private String email;
     private double gpa;
-    
+    private int age;
+
+    private void validateAge(int age) {
+        if (age < 16 || age > 100) {
+            throw new IllegalArgumentException("Age must be between 16 and 100");
+        }
+    }
+
     // Constructor with required fields
     public Student(String studentId, String name, String email) {
         this.studentId = studentId;
         this.name = name;
         this.email = email;
         this.gpa = 0.0;
+        this.age = 0;
     }
-    
-    // Constructor with all fields
-    public Student(String studentId, String name, String email, double gpa) {
+
+    // Constructor with age (no gpa)
+    public Student(String studentId, String name, String email, int age) {
         this.studentId = studentId;
         this.name = name;
         this.email = email;
-        this.gpa = gpa;
+        this.gpa = 0.0;
+        validateAge(age);
+        this.age = age;
+    }
+    
+    // Constructor with all fields
+    public Student(String studentId, String name, String email, double gpa, int age) {
+        this.studentId = studentId;
+        this.name = name;
+        this.email = email;
+        setGpa(gpa);
+        validateAge(age);
+        this.age = age;
     }
     
     // Getters and Setters
@@ -67,7 +87,16 @@ public class Student {
             throw new IllegalArgumentException("GPA must be between 0.0 and 4.0");
         }
     }
-    
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        validateAge(age);
+        this.age = age;
+    }
+
     // Validate email format
     public boolean isValidEmail() {
         return email != null && email.contains("@") && email.contains(".");
@@ -75,8 +104,8 @@ public class Student {
     
     @Override
     public String toString() {
-        return String.format("Student{id='%s', name='%s', email='%s', gpa=%.2f}", 
-                studentId, name, email, gpa);
+        return String.format("Student{id='%s', name='%s', email='%s', gpa=%.2f, age=%d}",
+                studentId, name, email, gpa, age);
     }
     
     @Override
