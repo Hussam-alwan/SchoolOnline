@@ -2,6 +2,7 @@ package com.bootcamp.onlineschool.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -145,5 +146,33 @@ public class Student {
 
     public int getTotalCredits() {
         return enrolledCourses.stream().mapToInt(Course::getCredits).sum();
+    }
+
+    public void calculateGpa(Map<Course,String> grades) {
+        if (grades == null || grades.isEmpty()) {
+            return;
+        }
+
+        double totalPoints = 0.0;
+        int totalCredits = 0;
+
+        for (var entry : grades.entrySet()) {
+            Course course = entry.getKey();
+            String grade = entry.getValue();
+
+            double gradePoint = switch (grade){
+                case "A"-> 4.0;
+                case "B"-> 3.0;
+                case "C"-> 2.0;
+                case "D"-> 1.0;
+                case "F"-> 0;
+                default -> throw new IllegalArgumentException("Invalid grade " + grade);
+            };
+            totalPoints += gradePoint *  course.getCredits();
+            totalCredits += course.getCredits();
+        }
+
+        if (totalCredits > 0) setGpa(totalPoints / totalCredits);
+
     }
 }
