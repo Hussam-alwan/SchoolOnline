@@ -1,5 +1,7 @@
 package com.bootcamp.onlineschool.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -15,6 +17,8 @@ public class Student {
     private String email;
     private double gpa;
     private int age;
+
+    List<Course> enrolledCourses=new ArrayList<>();
 
     private void validateAge(int age) {
         if (age < 16 || age > 100) {
@@ -119,5 +123,27 @@ public class Student {
     @Override
     public int hashCode() {
         return Objects.hash(studentId);
+    }
+
+    public void enrollInCourse(Course course) {
+        if (course != null && !enrolledCourses.contains(course)) {
+            enrolledCourses.add(course);
+        }
+    }
+
+    public void dropCourse(String courseId) {
+        for (Course course : enrolledCourses) {
+            if (course.getCourseId().equals(courseId)) {
+                enrolledCourses.remove(course);
+                break;
+            }
+        }
+    }
+    public List<Course> getEnrolledCourses() {
+        return enrolledCourses;
+    }
+
+    public int getTotalCredits() {
+        return enrolledCourses.stream().mapToInt(Course::getCredits).sum();
     }
 }
