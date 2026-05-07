@@ -1,8 +1,8 @@
 package com.bootcamp.onlineschool.model;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -30,7 +30,7 @@ public class StudentTest {
     @DisplayName("Should create student with valid data")
     public void testStudentCreation() {
         assertNotNull(student);
-        assertEquals("STU001", student.getStudentId());
+        assertEquals("STU001", student.getId());
         assertEquals("John Doe", student.getName());
         assertEquals("john@school.edu", student.getEmail());
         assertEquals(0.0, student.getGpa());
@@ -145,5 +145,28 @@ public class StudentTest {
     public void testSetAgeInvalid(int age) {
         Student s = new Student("STU002", "Jane Doe", "jane@school.edu", 20);
         assertThrows(IllegalArgumentException.class, () -> s.setAge(age));
+    }
+
+    @Test
+    @DisplayName("Should return Student role")
+    public void testStudentRole() {
+        assertEquals("Student", student.getRole());
+    }
+
+    @Test
+    @DisplayName("Should validate email for Student")
+    public void testStudentEmailValidation() {
+        assertTrue(student.isValidEmail());
+
+        Student invalidStudent = new Student("STU002", "Jane Doe", "jane@gmail.com");
+        assertFalse(invalidStudent.isValidEmail());
+    }
+
+    @Test
+    @DisplayName("Should treat Student as User")
+    public void testStudentIsUser() {
+        User user = student;
+        assertEquals("STU001", user.getId());
+        assertEquals("Student", user.getRole());
     }
 }

@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 public class StudentRegistry {
     private List<Student> students;
     private Map<String, Student> studentMap;
-    
+
     public StudentRegistry() {
         this.students = new ArrayList<>();
         this.studentMap = new HashMap<>();
     }
-    
+
     /**
      * Add a student to the registry
      */
@@ -32,9 +32,8 @@ public class StudentRegistry {
             throw new IllegalArgumentException("Invalid email format");
         }
         students.add(student);
-        studentMap.put(student.getStudentId(), student);
     }
-    
+
     /**
      * Remove a student by ID
      */
@@ -47,8 +46,11 @@ public class StudentRegistry {
         return false;
     }
 
+    /**
+     * Find a student by email (case-insensitive)
+     */
     public Student findByEmail(String email) {
-        if (email == null|| email.isEmpty()) {
+        if (email == null || email.isEmpty()) {
             return null;
         }
         return students.stream()
@@ -56,14 +58,14 @@ public class StudentRegistry {
                 .findFirst()
                 .orElse(null);
     }
-    
+
     /**
      * Find a student by ID
      */
     public Student findStudentById(String studentId) {
         return studentMap.get(studentId);
     }
-    
+
     /**
      * Find students by name (partial match)
      */
@@ -72,7 +74,7 @@ public class StudentRegistry {
                 .filter(s -> s.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * Get all students sorted by name
      */
@@ -81,7 +83,7 @@ public class StudentRegistry {
                 .sorted(Comparator.comparing(Student::getName))
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * Get all students sorted by GPA (descending)
      */
@@ -90,7 +92,7 @@ public class StudentRegistry {
                 .sorted(Comparator.comparingDouble(Student::getGpa).reversed())
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * Get students with GPA above threshold
      */
@@ -99,7 +101,7 @@ public class StudentRegistry {
                 .filter(s -> s.getGpa() >= threshold)
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * Display all students
      */
@@ -110,14 +112,14 @@ public class StudentRegistry {
         }
         students.forEach(System.out::println);
     }
-    
+
     /**
      * Get total number of students
      */
     public int getStudentCount() {
         return students.size();
     }
-    
+
     /**
      * Get average GPA
      */
@@ -130,7 +132,7 @@ public class StudentRegistry {
                 .average()
                 .orElse(0.0);
     }
-    
+
     /**
      * Clear all students
      */
@@ -139,20 +141,27 @@ public class StudentRegistry {
         studentMap.clear();
     }
 
-    public List<Student> findStudentsByGpaRange(Double min, Double max) {
-        if (min>max){
-            throw new IllegalArgumentException("Min has to be greater than max");
+    /**
+     * Find students by GPA range (inclusive)
+     */
+    public List<Student> findStudentsByGpaRange(double min, double max) {
+        if (min > max) {
+            throw new IllegalArgumentException("Min GPA cannot be greater than max GPA");
         }
         return students.stream()
                 .filter(s -> s.getGpa() >= min && s.getGpa() <= max)
-                .toList();
+                .collect(Collectors.toList());
     }
-    public List<Student> findStudentsByEmailDomain(String domain){
-        if (domain==null||domain.isEmpty()){
-           return new ArrayList<>();
+
+    /**
+     * Find students by email domain
+     */
+    public List<Student> findStudentsByEmailDomain(String domain) {
+        if (domain == null || domain.isEmpty()) {
+            return new ArrayList<>();
         }
         return students.stream()
-                .filter(s -> s.getEmail().endsWith("edu"))
-                .toList();
+                .filter(s -> s.getEmail().endsWith(domain))
+                .collect(Collectors.toList());
     }
 }
