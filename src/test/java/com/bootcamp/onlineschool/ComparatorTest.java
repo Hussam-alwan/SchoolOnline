@@ -7,9 +7,7 @@ import com.bootcamp.onlineschool.model.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Comparator Tests")
@@ -129,5 +127,24 @@ public class ComparatorTest {
                 (s1, s2) -> s1.getName().compareToIgnoreCase(s2.getName()));
         assertEquals("Alice Johnson", sorted.get(0).getName());
         assertEquals("Bob Smith", sorted.get(1).getName());
+    }
+    @Test
+    @DisplayName("Should sort students by GPA descending then name ascending using registry method")
+    public void testGetAllStudentsSortedByGpaName() {
+        List<Student> sorted = registry.getAllStudentsSortedByGpaName();
+        assertEquals("Bob Smith", sorted.get(0).getName());
+        assertEquals("Alice Johnson", sorted.get(1).getName());
+        assertEquals("Charlie Brown", sorted.get(2).getName());
+        assertEquals("Diana Prince", sorted.get(3).getName());
+    }
+
+    @Test
+    @DisplayName("Should sort students by email domain then name using registry method")
+    public void testGetAllStudentsSortedByEmailDomain() {
+        List<Student> sorted = registry.getAllStudentsSortedByEmailDomain();
+        assertEquals("Alice Johnson", sorted.get(0).getName());
+        assertEquals("Bob Smith", sorted.get(1).getName());
+        assertEquals("Charlie Brown", sorted.get(2).getName());
+        assertEquals("Diana Prince", sorted.get(3).getName());
     }
 }
