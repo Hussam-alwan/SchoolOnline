@@ -35,6 +35,7 @@ public class StudentRegistry {
             throw new IllegalArgumentException("Invalid email format");
         }
         students.add(student);
+        studentMap.put(student.getId(), student);
     }
 
     /**
@@ -101,7 +102,7 @@ public class StudentRegistry {
      */
     public List<Student> getStudentsWithHighGpa(double threshold) {
         return students.stream()
-                .filter(s -> s.getGpa() >= threshold)
+                .filter(s -> s.getGpa() > threshold)
                 .collect(Collectors.toList());
     }
 
@@ -186,4 +187,46 @@ public class StudentRegistry {
                 .collect(Collectors.toList());
     }
 
+    public Map<String, Integer> getGpaDistribution() {
+        Map<String, Integer> distribution = new LinkedHashMap<>();
+        distribution.put("A", 0);
+        distribution.put("B", 0);
+        distribution.put("C", 0);
+        distribution.put("D", 0);
+        distribution.put("F", 0);
+
+        for (Student student : students) {
+            double gpa = student.getGpa();
+            if (gpa >= 3.7) {
+                distribution.put("A", distribution.get("A") + 1);
+            } else if (gpa >= 2.7) {
+                distribution.put("B", distribution.get("B") + 1);
+            } else if (gpa >= 1.7) {
+                distribution.put("C", distribution.get("C") + 1);
+            } else if (gpa >= 1.0) {
+                distribution.put("D", distribution.get("D") + 1);
+            } else {
+                distribution.put("F", distribution.get("F") + 1);
+            }
+        }
+        return distribution;
+    }
+
+    public List<Student> getTopNStudents(int n) {
+        if (n<=0) return new ArrayList<>();
+        return students.stream()
+                .sorted(Comparator.comparingDouble(Student::getGpa).reversed())
+                .limit(n)
+                .collect(Collectors.toList());
+    }
+
+    public List<Student> getStudentsByGpaPercentile(double percentile) {
+        if (students.isEmpty()) return new ArrayList<>();
+        if (percentile < 0 || percentile > 100) return new ArrayList<>();
+
+        double threshold = (percentile / 100.0) * 4.0;
+        return students.stream()
+                .filter(s -> s.getGpa() >= threshold)
+                .collect(Collectors.toList());
+    }
 }
