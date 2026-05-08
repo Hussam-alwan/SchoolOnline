@@ -1,5 +1,8 @@
 package com.bootcamp.onlineschool;
 
+import com.bootcamp.onlineschool.comparator.StudentEmailDomainComparator;
+import com.bootcamp.onlineschool.comparator.StudentGpaNameComparator;
+import com.bootcamp.onlineschool.comparator.StudentNameComparator;
 import com.bootcamp.onlineschool.model.Student;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -80,7 +83,7 @@ public class StudentRegistry {
      */
     public List<Student> getAllStudentsSortedByName() {
         return students.stream()
-                .sorted(Comparator.comparing(Student::getName))
+                .sorted(new StudentNameComparator())
                 .collect(Collectors.toList());
     }
 
@@ -164,4 +167,23 @@ public class StudentRegistry {
                 .filter(s -> s.getEmail().endsWith(domain))
                 .collect(Collectors.toList());
     }
+
+    public List<Student> getAllStudentsSorted(Comparator<Student> comparator) {
+        return students.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
+    public List<Student> getAllStudentsSortedByGpaName() {
+        return students.stream()
+                .sorted(new StudentGpaNameComparator())
+                .collect(Collectors.toList());
+    }
+
+    public List<Student> getAllStudentsSortedByEmailDomain() {
+        return students.stream()
+                .sorted(new StudentEmailDomainComparator())
+                .collect(Collectors.toList());
+    }
+
 }
