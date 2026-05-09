@@ -22,10 +22,10 @@ public class ComparatorTest {
     @BeforeEach
     public void setUp() {
         registry = new StudentRegistry();
-        student1 = new Student("STU001", "Charlie Brown", "charlie@school.edu", 3.8, 20);
-        student2 = new Student("STU002", "Alice Johnson", "alice@school.edu", 3.8, 22);
-        student3 = new Student("STU003", "Bob Smith", "bob@school.edu", 3.9, 21);
-        student4 = new Student("STU004", "Diana Prince", "diana@school.edu", 3.5, 23);
+        student1 = new Student("STU001", "Charlie Brown", "charlie@school1.edu", 3.8, 20);
+        student2 = new Student("STU002", "Alice Johnson", "alice@school1.edu", 3.8, 22);
+        student3 = new Student("STU003", "Bob Smith", "bob@school1.edu", 3.9, 21);
+        student4 = new Student("STU004", "Diana Prince", "diana@school1.edu", 3.5, 23);
 
         registry.addStudent(student1);
         registry.addStudent(student2);

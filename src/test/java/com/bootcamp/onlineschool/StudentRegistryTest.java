@@ -2,8 +2,8 @@ package com.bootcamp.onlineschool;
 
 import com.bootcamp.onlineschool.model.Student;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -26,14 +26,14 @@ public class StudentRegistryTest {
     private Student student2;
     private Student student3;
 
-    @BeforeEach
-    public void setUp() {
-        registry = new StudentRegistry();
-        student1 = new Student("STU001", "Alice Johnson", "alice@school.edu", 4.0, 17);
-        student2 = new Student("STU002", "Bob Smith",     "bob@school.edu",   3.5, 18);
-        student3 = new Student("STU003", "Charlie Brown", "charlie@school.edu", 3.9, 19);
-    }
-    
+     @BeforeEach
+     public void setUp() {
+         registry = new StudentRegistry();
+         student1 = new Student("STU001", "Alice Johnson", "alice@school1.edu", 4.0, 17);
+         student2 = new Student("STU002", "Bob Smith",     "bob@school2.edu",   3.5, 18);
+         student3 = new Student("STU003", "Charlie Brown", "charlie@school3.edu", 3.9, 19);
+     }
+
     @Test
     @DisplayName("Should add students to registry")
     public void testAddStudent() {
@@ -170,7 +170,7 @@ public class StudentRegistryTest {
         registry.addStudent(student1);
         registry.addStudent(student2);
 
-        Student found = registry.findByEmail("alice@school.edu");
+        Student found = registry.findByEmail("alice@school1.edu");
         assertNotNull(found);
         assertEquals(student1.getEmail(), found.getEmail());
     }
@@ -180,7 +180,7 @@ public class StudentRegistryTest {
     public void testFindByEmailCaseInsensitive() {
         registry.addStudent(student1);
 
-        Student found = registry.findByEmail("ALICE@SCHOOL.EDU");
+        Student found = registry.findByEmail("ALICE@SCHOOL1.EDU");
         assertNotNull(found);
         assertEquals(student1.getEmail(), found.getEmail());
     }
@@ -189,7 +189,7 @@ public class StudentRegistryTest {
     @DisplayName("Should return null for non-existent email")
     public void testFindByEmailNotFound() {
         registry.addStudent(student1);
-        assertNull(registry.findByEmail("notfound@school.edu"));
+        assertNull(registry.findByEmail("notfound@school1.edu"));
     }
 
     @Test
@@ -248,7 +248,9 @@ public class StudentRegistryTest {
         registry.addStudent(student2);
         registry.addStudent(student3);
 
-        assertEquals(3, registry.findStudentsByEmailDomain("school.edu").size());
+        assertEquals(1, registry.findStudentsByEmailDomain("school1.edu").size());
+        assertEquals(1, registry.findStudentsByEmailDomain("school2.edu").size());
+        assertEquals(1, registry.findStudentsByEmailDomain("school3.edu").size());
     }
 
     @Test
@@ -283,9 +285,9 @@ public class StudentRegistryTest {
     @DisplayName("Should count multiple students in same grade")
     public void testGpaDistributionMultipleSameGrade() {
         StudentRegistry r = new StudentRegistry();
-        r.addStudent(new Student("S1", "Alice",   "alice@school.edu",   4.0, 20));
-        r.addStudent(new Student("S2", "Bob",     "bob@school.edu",     3.8, 21));
-        r.addStudent(new Student("S3", "Charlie", "charlie@school.edu", 3.7, 22));
+        r.addStudent(new Student("S1", "Alice",   "alice@school1.edu",   4.0, 20));
+        r.addStudent(new Student("S2", "Bob",     "bob@school2.edu",     3.8, 21));
+        r.addStudent(new Student("S3", "Charlie", "charlie@school3.edu", 3.7, 22));
         assertEquals(3, r.getGpaDistribution().get("A"));
     }
 

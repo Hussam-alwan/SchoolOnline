@@ -63,7 +63,7 @@ public abstract class User {
 
     // Validate email format
     public boolean isValidEmail() {
-        return email != null && email.contains("@") && email.contains(".") && email.endsWith("@school.edu");
+        return email != null && email.matches(".*@school\\d+\\.edu$");
     }
 
 }

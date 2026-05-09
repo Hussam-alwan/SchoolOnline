@@ -23,7 +23,7 @@ public class StudentTest {
     
     @BeforeEach
     public void setUp() {
-        student = new Student("STU001", "John Doe", "john@school.edu");
+        student = new Student("STU001", "John Doe", "john@school1.edu");
     }
     
     @Test
@@ -32,7 +32,7 @@ public class StudentTest {
         assertNotNull(student);
         assertEquals("STU001", student.getId());
         assertEquals("John Doe", student.getName());
-        assertEquals("john@school.edu", student.getEmail());
+        assertEquals("john@school1.edu", student.getEmail());
         assertEquals(0.0, student.getGpa());
     }
     
@@ -47,7 +47,7 @@ public class StudentTest {
 
     @ParameterizedTest
     @DisplayName("Should accept valid  emails")
-    @ValueSource(strings = {"student@school.edu", "john.doe@school.edu"})
+    @ValueSource(strings = {"student@school1.edu", "john.doe@school2.edu"})
     public void testValidEmail(String email) {
         Student s = new Student("STU002", "Jane Doe", email);
         assertTrue(s.isValidEmail());
@@ -85,10 +85,10 @@ public class StudentTest {
     @DisplayName("Should update student information")
     public void testUpdateStudentInfo() {
         student.setName("Jane Doe");
-        student.setEmail("jane@school.edu");
+        student.setEmail("jane@school1.edu");
 
         assertEquals("Jane Doe", student.getName());
-        assertEquals("jane@school.edu", student.getEmail());
+        assertEquals("jane@school1.edu", student.getEmail());
     }
 
     @Test
@@ -99,15 +99,15 @@ public class StudentTest {
 
         assertTrue(result.contains("STU001"));
         assertTrue(result.contains("John Doe"));
-        assertTrue(result.contains("john@school.edu"));
+        assertTrue(result.contains("john@school1.edu"));
         assertTrue(result.contains("3.80"));
     }
 
     @Test
     @DisplayName("Should compare students by ID")
     public void testEqualsAndHashCode() {
-        Student student2 = new Student("STU001", "Different Name", "different@school.edu");
-        Student student3 = new Student("STU002", "John Doe", "john@school.edu");
+        Student student2 = new Student("STU001", "Different Name", "different@school1.edu");
+        Student student3 = new Student("STU002", "John Doe", "john@school1.edu");
 
         assertEquals(student, student2);
         assertNotEquals(student, student3);
@@ -118,7 +118,7 @@ public class StudentTest {
     @DisplayName("Should accept valid age values")
     @ValueSource(ints = {16, 50, 100})
     public void testValidAge(int age) {
-        Student s = new Student("STU002", "Jane Doe", "jane@school.edu", age);
+        Student s = new Student("STU002", "Jane Doe", "jane@school1.edu", age);
         assertEquals(age, s.getAge());
     }
 
@@ -127,14 +127,14 @@ public class StudentTest {
     @ValueSource(ints = {15, 101, -5})
     public void testInvalidAgeInConstructor(int age) {
         assertThrows(IllegalArgumentException.class, () ->
-                new Student("STU002", "Jane Doe", "jane@school.edu", age));
+                new Student("STU002", "Jane Doe", "jane@school1.edu", age));
     }
 
     @ParameterizedTest
     @DisplayName("Should accept valid age values through setter")
     @ValueSource(ints = {16, 50, 100})
     public void testSetAgeValid(int age) {
-        Student s = new Student("STU002", "Jane Doe", "jane@school.edu", 20);
+        Student s = new Student("STU002", "Jane Doe", "jane@school1.edu", 20);
         s.setAge(age);
         assertEquals(age, s.getAge());
     }
@@ -143,7 +143,7 @@ public class StudentTest {
     @DisplayName("Should throw exception for invalid age through setter")
     @ValueSource(ints = {15, 101, -5})
     public void testSetAgeInvalid(int age) {
-        Student s = new Student("STU002", "Jane Doe", "jane@school.edu", 20);
+        Student s = new Student("STU002", "Jane Doe", "jane@school1.edu", 20);
         assertThrows(IllegalArgumentException.class, () -> s.setAge(age));
     }
 

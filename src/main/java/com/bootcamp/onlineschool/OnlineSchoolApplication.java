@@ -21,10 +21,10 @@ public class OnlineSchoolApplication {
         StudentRegistry registry = new StudentRegistry();
         
         // Add some students
-        Student student1 = new Student("STU001", "Alice Johnson", "alice@school.edu");
-        Student student2 = new Student("STU002", "Bob Smith", "bob@school.edu");
-        Student student3 = new Student("STU003", "Charlie Brown", "charlie@school.edu");
-        
+        Student student1 = new Student("STU001", "Alice Johnson", "alice@school1.edu");
+        Student student2 = new Student("STU002", "Bob Smith", "bob@school2.edu");
+        Student student3 = new Student("STU003", "Charlie Brown", "charlie@school3.edu");
+
         registry.addStudent(student1);
         registry.addStudent(student2);
         registry.addStudent(student3);

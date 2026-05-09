@@ -15,7 +15,7 @@ public class TeacherTest {
 
     @BeforeEach
     public void setUp() {
-        teacher = new Teacher("TCH001", "Dr. Smith", "smith@school.edu", "Computer Science");
+        teacher = new Teacher("TCH001", "Dr. Smith", "smith@school1.edu", "Computer Science");
         course1 = new Course("CS101", "Introduction to Programming", 3);
         course2 = new Course("CS102", "Data Structures", 4);
     }
@@ -26,7 +26,7 @@ public class TeacherTest {
         assertNotNull(teacher);
         assertEquals("TCH001", teacher.getId());
         assertEquals("Dr. Smith", teacher.getName());
-        assertEquals("smith@school.edu", teacher.getEmail());
+        assertEquals("smith@school1.edu", teacher.getEmail());
         assertEquals("Computer Science", teacher.getDepartment());
     }
 

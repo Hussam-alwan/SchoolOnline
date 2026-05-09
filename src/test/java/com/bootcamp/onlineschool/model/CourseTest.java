@@ -19,7 +19,7 @@ public class CourseTest {
 
     @BeforeEach
     public void setUp() {
-        student = new Student("STU001", "John Doe", "john@school.edu", 20);
+        student = new Student("STU001", "John Doe", "john@school1.edu", 20);
         course1 = new Course("CS101", "Introduction to Programming", 3);
         course2 = new Course("CS102", "Data Structures", 4);
         course3 = new Course("CS103", "Algorithms", 3);

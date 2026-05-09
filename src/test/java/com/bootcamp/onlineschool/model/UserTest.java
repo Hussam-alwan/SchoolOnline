@@ -14,8 +14,8 @@ public class UserTest {
 
     @BeforeEach
     public void setUp() {
-        student = new Student("STU001", "John Doe", "john@school.edu", 20);
-        teacher = new Teacher("TCH001", "Dr. Smith", "smith@school.edu", "Computer Science");
+        student = new Student("STU001", "John Doe", "john@school1.edu", 20);
+        teacher = new Teacher("TCH001", "Dr. Smith", "smith@school1.edu", "Computer Science");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class UserTest {
     @Test
     @DisplayName("Should get email correctly")
     public void testGetEmail() {
-        assertEquals("john@school.edu", student.getEmail());
-        assertEquals("smith@school.edu", teacher.getEmail());
+        assertEquals("john@school1.edu", student.getEmail());
+        assertEquals("smith@school1.edu", teacher.getEmail());
     }
 
     @Test
@@ -49,8 +49,8 @@ public class UserTest {
     @Test
     @DisplayName("Should update email through setter")
     public void testSetEmail() {
-        student.setEmail("jane@school.edu");
-        assertEquals("jane@school.edu", student.getEmail());
+        student.setEmail("jane@school1.edu");
+        assertEquals("jane@school1.edu", student.getEmail());
     }
 
     @Test
@@ -77,8 +77,8 @@ public class UserTest {
     @Test
     @DisplayName("Should compare users by ID")
     public void testEqualsAndHashCode() {
-        User student2 = new Student("STU001", "Different Name", "different@school.edu");
-        User student3 = new Student("STU002", "John Doe", "john@school.edu");
+        User student2 = new Student("STU001", "Different Name", "different@school1.edu");
+        User student3 = new Student("STU002", "John Doe", "john@school1.edu");
 
         assertEquals(student, student2);
         assertNotEquals(student, student3);
@@ -91,7 +91,7 @@ public class UserTest {
         String result = student.toString();
         assertTrue(result.contains("STU001"));
         assertTrue(result.contains("John Doe"));
-        assertTrue(result.contains("john@school.edu"));
+        assertTrue(result.contains("john@school1.edu"));
         assertTrue(result.contains("Student"));
     }
 }
