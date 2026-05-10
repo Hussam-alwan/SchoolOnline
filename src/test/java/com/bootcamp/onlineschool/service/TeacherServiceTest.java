@@ -10,7 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest
 @DisplayName("TeacherService Test")
 class TeacherServiceTest {
@@ -118,6 +120,6 @@ class TeacherServiceTest {
         teacherService.addTeacher(new Teacher("T001", "Alice Smith", "alice@school.edu", "Math", 5));
         teacherService.removeTeacher("T001");
 
-        assertThrows(TeacherService.TeacherNotFoundException.class, () -> {teacherService.findTeacherById("T001");});
+        assertThrows(TeacherService.TeacherNotFoundException.class, () -> teacherService.findTeacherById("T001"));
     }
 }
