@@ -1,5 +1,6 @@
 package com.bootcamp.onlineschool.service;
 
+import com.bootcamp.onlineschool.config.SchoolProperties;
 import com.bootcamp.onlineschool.model.Department;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -11,6 +12,13 @@ import java.util.Map;
 public class DepartmentService {
 
     private final Map<String, Department> departmentMap = new HashMap<>();
+    private final SchoolProperties schoolProperties;
+
+    public DepartmentService(SchoolProperties schoolProperties) {
+        this.schoolProperties = schoolProperties;
+    }
+
+
 
     public Department createDepartment(String id, String name, String head, double budget) {
         if (departmentMap.containsKey(id)) {
@@ -37,6 +45,15 @@ public class DepartmentService {
 
     public void assignTeacherToDepartment(String deptId, String teacherId) {
         Department department = getDepartmentById(deptId);
+
+        // Enforce the configured maximum
+        if (department.getTeacherCount() >= schoolProperties.getMaxTeachersPerDepartment()) {
+            throw new IllegalStateException(
+                    "Department is full. Maximum teachers per department: "
+                            + schoolProperties.getMaxTeachersPerDepartment()
+            );
+        }
+
         department.addTeacherId(teacherId);
     }
 

@@ -1,5 +1,6 @@
 package com.bootcamp.onlineschool.integration;
 
+import com.bootcamp.onlineschool.config.SchoolProperties;
 import com.bootcamp.onlineschool.model.Course;
 import com.bootcamp.onlineschool.model.Department;
 import com.bootcamp.onlineschool.model.Student;
@@ -34,6 +35,9 @@ public class ServiceIntegrationTest {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private SchoolProperties schoolProperties;
+
     @BeforeEach
     void setUp() {
         // Clean — just create
@@ -44,8 +48,8 @@ public class ServiceIntegrationTest {
         departmentService.assignTeacherToDepartment("D001", "T001");
         departmentService.assignTeacherToDepartment("D001", "T002");
 
-        courseService.createCourse("C001", "Java Basics", 3, "Alice", 30);
-        courseService.createCourse("C002", "Data Structures", 4, "Bob", 25);
+        courseService.createCourse("C001", "Java Basics", 3, "Alice");
+        courseService.createCourse("C002", "Data Structures", 4, "Bob");
 
         studentService.addStudent(new Student("S001", "Charlie", "charlie@school.com", 3.5));
         studentService.addStudent(new Student("S002", "Diana", "diana@school.com", 3.8));
@@ -179,7 +183,15 @@ public class ServiceIntegrationTest {
         assertThrows(StudentService.StudentNotFoundException.class, () -> studentService.findStudentById("S999"));
 
         assertThrows(DepartmentService.DepartmentAlreadyExistsException.class, () -> departmentService.createDepartment("D001", "Duplicate Department", "Dr. Duplicate", 5000.0));
-        assertThrows(CourseService.CourseAlreadyExistsException.class, () -> courseService.createCourse("C001", "Duplicate Course", 3, "Alice", 30));
+        assertThrows(CourseService.CourseAlreadyExistsException.class, () -> courseService.createCourse("C001", "Duplicate Course", 3, "Alice"));
+    }
+
+    @Test
+    @DisplayName("Course should be created with max students from configuration")
+    public void testCourseUsesConfiguredMaxStudents() {
+        Course course = courseService.createCourse("C005", "Java", 3, "Alice");
+
+        assertEquals(schoolProperties.getMaxStudentsPerCourse(), course.getMaxStudents());
     }
 
 }

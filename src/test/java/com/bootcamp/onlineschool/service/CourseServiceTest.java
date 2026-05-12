@@ -2,13 +2,11 @@ package com.bootcamp.onlineschool.service;
 
 import com.bootcamp.onlineschool.model.Course;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -38,7 +36,7 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should create course successfully")
     public void testCreateCourse() {
-        Course course = courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        Course course = courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
         
         assertNotNull(course);
         assertEquals("CS101", course.getCourseId());
@@ -49,16 +47,16 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should throw exception when creating duplicate course")
     public void testCreateDuplicateCourse() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
         
         assertThrows(CourseService.CourseAlreadyExistsException.class, 
-            () -> courseService.createCourse("CS101", "Different Name", 4, "Dr. Brown", 25));
+            () -> courseService.createCourse("CS101", "Different Name", 4, "Dr. Brown"));
     }
     
     @Test
     @DisplayName("Should get course by ID")
     public void testGetCourseById() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
         
         Course course = courseService.getCourseById("CS101");
         assertNotNull(course);
@@ -75,9 +73,9 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should get all courses")
     public void testGetAllCourses() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
-        courseService.createCourse("CS102", "Advanced Java", 4, "Dr. Brown", 25);
-        courseService.createCourse("CS103", "Web Development", 3, "Dr. Johnson", 20);
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
+        courseService.createCourse("CS102", "Advanced Java", 4, "Dr. Brown");
+        courseService.createCourse("CS103", "Web Development", 3, "Dr. Johnson");
         
         List<Course> courses = courseService.getAllCourses();
         assertEquals(3, courses.size());
@@ -86,7 +84,7 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should enroll student in course")
     public void testEnrollStudent() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
         
         boolean enrolled = courseService.enrollStudent("CS101");
         assertTrue(enrolled);
@@ -98,12 +96,10 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should not enroll when course is full")
     public void testEnrollWhenFull() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 1);
-        
-        // Fill the course
-        courseService.enrollStudent("CS101");
-        
-        // Try to enroll another
+        Course course = courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
+        for (int i = 0; i < course.getMaxStudents(); i++) {
+            assertTrue(courseService.enrollStudent("CS101"));
+        }
         boolean enrolled = courseService.enrollStudent("CS101");
         assertFalse(enrolled);
     }
@@ -111,7 +107,7 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should unenroll student from course")
     public void testUnenrollStudent() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
         courseService.enrollStudent("CS101");
         
         boolean unenrolled = courseService.unenrollStudent("CS101");
@@ -124,12 +120,14 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should get available courses")
     public void testGetAvailableCourses() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 1);
-        courseService.createCourse("CS102", "Advanced Java", 4, "Dr. Brown", 30);
+        Course cs101 = courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
+        courseService.createCourse("CS102", "Advanced Java", 4, "Dr. Brown");
         
-        // Fill CS101
-        courseService.enrollStudent("CS101");
-        
+        // Fill CS101 to capacity so it is no longer available
+        for (int i = 0; i < cs101.getMaxStudents(); i++) {
+            assertTrue(courseService.enrollStudent("CS101"));
+        }
+
         List<Course> available = courseService.getAvailableCourses();
         assertEquals(1, available.size());
         assertEquals("CS102", available.get(0).getCourseId());
@@ -138,7 +136,7 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should update instructor")
     public void testUpdateInstructor() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
         
         courseService.updateInstructor("CS101", "Dr. Johnson");
         
@@ -149,7 +147,7 @@ public class CourseServiceTest {
     @Test
     @DisplayName("Should delete course")
     public void testDeleteCourse() {
-        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith", 30);
+        courseService.createCourse("CS101", "Java Basics", 3, "Dr. Smith");
         assertEquals(1, courseService.getTotalCourses());
         
         boolean deleted = courseService.deleteCourse("CS101");

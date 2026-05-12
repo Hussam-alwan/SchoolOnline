@@ -3,7 +3,11 @@ package com.bootcamp.onlineschool.service;
 import com.bootcamp.onlineschool.config.SchoolProperties;
 import com.bootcamp.onlineschool.model.Course;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * CourseService demonstrates Spring Boot service with in-memory storage
@@ -29,13 +33,13 @@ public class CourseService {
     /**
      * Create a new course
      */
-    public Course createCourse(String courseId, String courseName, int credits, 
-                               String instructor, int maxStudents) {
+    public Course createCourse(String courseId, String courseName, int credits, String instructor) {
         if (courses.containsKey(courseId)) {
             throw new CourseAlreadyExistsException("Course already exists: " + courseId);
         }
-        int maxStudentsPerCourse = schoolProperties.getMaxStudentsPerCourse();
-        Course course = new Course(courseId, courseName, credits, instructor, maxStudentsPerCourse);
+
+        int maxStudents = schoolProperties.getMaxStudentsPerCourse();
+        Course course = new Course(courseId, courseName, credits, instructor, maxStudents);
         courses.put(courseId, course);
         return course;
     }

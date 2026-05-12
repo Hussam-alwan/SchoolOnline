@@ -1,6 +1,7 @@
 package com.bootcamp.onlineschool.service;
 
 import com.bootcamp.onlineschool.StudentRegistry;
+import com.bootcamp.onlineschool.config.SchoolProperties;
 import com.bootcamp.onlineschool.model.Student;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -18,14 +19,20 @@ import java.util.List;
 public class StudentService {
     
     private final StudentRegistry studentRegistry;
+    private final SchoolProperties schoolProperties;
     
     /**
      * Constructor injection - Spring automatically injects StudentRegistry
      */
-    public StudentService(StudentRegistry studentRegistry) {
+    public StudentService(StudentRegistry studentRegistry, SchoolProperties schoolProperties) {
         this.studentRegistry = studentRegistry;
+        this.schoolProperties = schoolProperties;
     }
-    
+
+    public List<Student> getHighAchievers() {
+        double threshold = schoolProperties.getDefaultGpaThreshold();
+        return studentRegistry.getStudentsWithHighGpa(threshold);
+    }
     /**
      * Add a new student
      */
