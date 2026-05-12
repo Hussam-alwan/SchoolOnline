@@ -1,5 +1,6 @@
 package com.bootcamp.onlineschool.service;
 
+import com.bootcamp.onlineschool.config.SchoolProperties;
 import com.bootcamp.onlineschool.model.Course;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -17,7 +18,14 @@ import java.util.*;
 public class CourseService {
     
     private final Map<String, Course> courses = new HashMap<>();
-    
+    private SchoolProperties schoolProperties;
+
+    public CourseService(SchoolProperties schoolProperties) {
+        this.schoolProperties = schoolProperties;
+    }
+
+
+
     /**
      * Create a new course
      */
@@ -26,8 +34,8 @@ public class CourseService {
         if (courses.containsKey(courseId)) {
             throw new CourseAlreadyExistsException("Course already exists: " + courseId);
         }
-        
-        Course course = new Course(courseId, courseName, credits, instructor, maxStudents);
+        int maxStudentsPerCourse = schoolProperties.getMaxStudentsPerCourse();
+        Course course = new Course(courseId, courseName, credits, instructor, maxStudentsPerCourse);
         courses.put(courseId, course);
         return course;
     }
