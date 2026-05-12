@@ -2,7 +2,6 @@ package com.bootcamp.onlineschool.service;
 
 import com.bootcamp.onlineschool.model.Department;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,13 +12,14 @@ public class DepartmentService {
 
     private final Map<String, Department> departmentMap = new HashMap<>();
 
-    public void createDepartment(String id, String name, String head, double budget) {
+    public Department createDepartment(String id, String name, String head, double budget) {
         if (departmentMap.containsKey(id)) {
             throw new DepartmentAlreadyExistsException("Department already exists with ID: " + id);
         }
 
         Department department = new Department(id, name, head, budget);
         departmentMap.put(id, department);
+        return department;
     }
 
     public Department getDepartmentById(String id) {
