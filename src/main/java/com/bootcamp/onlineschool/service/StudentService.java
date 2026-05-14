@@ -3,7 +3,10 @@ package com.bootcamp.onlineschool.service;
 import com.bootcamp.onlineschool.StudentRegistry;
 import com.bootcamp.onlineschool.config.SchoolProperties;
 import com.bootcamp.onlineschool.model.Student;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 /**
@@ -29,6 +32,10 @@ public class StudentService {
         this.schoolProperties = schoolProperties;
     }
 
+    /**
+     * Gets high achievers - result is cached
+     */
+    @Cacheable(value = "students", key = "'highAchievers'")
     public List<Student> getHighAchievers() {
         double threshold = schoolProperties.getDefaultGpaThreshold();
         return studentRegistry.getStudentsWithHighGpa(threshold);
@@ -36,6 +43,7 @@ public class StudentService {
     /**
      * Add a new student
      */
+    @CacheEvict(value = "students", allEntries = true)
     public void addStudent(Student student) {
         if (student == null) {
             throw new IllegalArgumentException("Student cannot be null");
@@ -46,6 +54,7 @@ public class StudentService {
     /**
      * Get all students
      */
+    @Cacheable(value = "students", key = "'allStudents'")
     public List<Student> getAllStudents() {
         return studentRegistry.getAllStudentsSortedByName();
     }
@@ -53,6 +62,7 @@ public class StudentService {
     /**
      * Find student by ID
      */
+    @Cacheable(value = "students", key = "#studentId")
     public Student findStudentById(String studentId) {
         Student student = studentRegistry.findStudentById(studentId);
         if (student == null) {
@@ -64,6 +74,7 @@ public class StudentService {
     /**
      * Find students by name
      */
+    @Cacheable(value = "students", key = "'name_' + #name")
     public List<Student> findStudentsByName(String name) {
         return studentRegistry.findStudentsByName(name);
     }
@@ -71,6 +82,7 @@ public class StudentService {
     /**
      * Get students with high GPA
      */
+    @Cacheable(value = "students", key = "'gpa_' + #gpaThreshold")
     public List<Student> getHighAchievers(double gpaThreshold) {
         return studentRegistry.getStudentsWithHighGpa(gpaThreshold);
     }
@@ -78,6 +90,7 @@ public class StudentService {
     /**
      * Remove a student
      */
+    @CacheEvict(value = "students", allEntries = true)
     public boolean removeStudent(String studentId) {
         return studentRegistry.removeStudent(studentId);
     }
@@ -85,6 +98,7 @@ public class StudentService {
     /**
      * Get total number of students
      */
+    @Cacheable(value = "students", key = "'totalCount'")
     public int getTotalStudents() {
         return studentRegistry.getStudentCount();
     }
@@ -92,6 +106,7 @@ public class StudentService {
     /**
      * Get average GPA
      */
+    @Cacheable(value = "students", key = "'averageGpa'")
     public double getAverageGpa() {
         return studentRegistry.getAverageGpa();
     }
