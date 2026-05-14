@@ -1,10 +1,7 @@
 package com.bootcamp.onlineschool.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -29,6 +26,16 @@ public class Teacher extends User {
     @Column(name = "hire_date", nullable = false)
     private LocalDate hireDate;
 
+    @NotNull(message = "Years of experience is required")
+    @PositiveOrZero(message = "Years of experience must be zero or positive")
+    @Column(name = "years_of_experience", nullable = false)
+    private Integer yearsOfExperience;
+
+    @NotNull(message = "Salary is required")
+    @Min(value = 0, message = "Salary must be zero or positive")
+    @Column(name = "salary", nullable = false)
+    private Double salary;
+
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Clazz> classes = new HashSet<>();
 
@@ -43,6 +50,17 @@ public class Teacher extends User {
         this.employeeId = employeeId;
         this.department = department;
         this.hireDate = hireDate;
+    }
+
+    // Full constructor including yearsOfExperience and salary
+    public Teacher(String name, String email, String employeeId, String department, LocalDate hireDate,
+                   Integer yearsOfExperience, Double salary) {
+        super(name, email);
+        this.employeeId = employeeId;
+        this.department = department;
+        this.hireDate = hireDate;
+        setYearsOfExperience(yearsOfExperience);
+        setSalary(salary);
     }
 
     // Getters and Setters
@@ -68,6 +86,36 @@ public class Teacher extends User {
 
     public void setHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
+    }
+
+    public Integer getYearsOfExperience() {
+        return yearsOfExperience;
+    }
+
+    /**
+     * Set years of experience. Validates non-negative input.
+     * @param yearsOfExperience must be zero or positive
+     */
+    public void setYearsOfExperience(Integer yearsOfExperience) {
+        if (yearsOfExperience != null && yearsOfExperience < 0) {
+            throw new IllegalArgumentException("Years of experience must be zero or positive");
+        }
+        this.yearsOfExperience = yearsOfExperience;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    /**
+     * Set salary. Validates non-negative input.
+     * @param salary must be zero or positive
+     */
+    public void setSalary(Double salary) {
+        if (salary != null && salary < 0) {
+            throw new IllegalArgumentException("Salary must be zero or positive");
+        }
+        this.salary = salary;
     }
 
     public Set<Clazz> getClasses() {
@@ -116,6 +164,8 @@ public class Teacher extends User {
                 ", employeeId='" + employeeId + '\'' +
                 ", department='" + department + '\'' +
                 ", hireDate=" + hireDate +
+                ", yearsOfExperience=" + yearsOfExperience +
+                ", salary=" + salary +
                 ", createdAt=" + getCreatedAt() +
                 ", updatedAt=" + getUpdatedAt() +
                 '}';
