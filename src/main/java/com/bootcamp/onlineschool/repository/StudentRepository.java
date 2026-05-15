@@ -1,6 +1,7 @@
 package com.bootcamp.onlineschool.repository;
 
 import com.bootcamp.onlineschool.entity.Student;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -60,4 +61,20 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      */
     @Query("SELECT AVG(s.gpa) FROM Student s")
     Double getAverageGpa();
+
+
+    @Query("SELECT s FROM Student s WHERE YEAR(s.enrollmentDate) = :year")
+    List<Student> findStudentsByEnrollmentYear(@Param("year") int year);
+
+    @Query("SELECT s FROM Student s WHERE s.gpa between :minGpa and :maxGpa")
+    List<Student> findStudentsByGpaRange(@Param("minGpa") Double minGpa, @Param("maxGpa") Double maxGpa);
+
+    @Query("SELECT count(s) FROM Student s WHERE YEAR(s.enrollmentDate) = :year")
+    Long countStudentsByEnrollmentYear(@Param("year") int year);
+
+    @Query("SELECT s FROM Student s WHERE s.email LIKE CONCAT('%', :domain)")
+    List<Student> findStudentsByDomain(@Param("domain") String domain);
+
+    @Query("SELECT s FROM Student s ORDER BY s.gpa desc")
+    List<Student> findStudentsOrderByGpaDesc(Pageable pageable);
 }

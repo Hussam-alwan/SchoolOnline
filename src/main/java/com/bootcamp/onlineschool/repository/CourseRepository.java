@@ -65,4 +65,10 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
      */
     @Query("SELECT SUM(c.enrolledStudents) FROM Course c")
     Long getTotalEnrollment();
+
+    @Query("SELECT c FROM Course c WHERE (c.enrolledStudents * 1.0/c.maxStudents) > :threshold")
+    List<Course> findCoursesWithThreshold(@Param("threshold") Double threshold);
+
+    @Query("SELECT c FROM Course c order by c.enrolledStudents desc")
+    List<Course> findCoursesWithOrderByEnrolledStudents();
 }
