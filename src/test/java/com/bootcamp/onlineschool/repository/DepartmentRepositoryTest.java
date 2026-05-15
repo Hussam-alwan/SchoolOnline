@@ -158,7 +158,7 @@ public class DepartmentRepositoryTest {
     @Test
     @DisplayName("should find distinct locations of departments")
     public void findDistinctLocations() {
-        List<Object[]> locations = departmentRepository.findDistinctLocations();
+        List<String> locations = departmentRepository.findDistinctLocations();
 
         assertEquals(2, locations.size());
     }

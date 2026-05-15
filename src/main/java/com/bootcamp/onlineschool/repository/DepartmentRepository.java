@@ -34,7 +34,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     List<Department> findDepartmentsWithAboveAverageBudget();
 
     @Query("SELECT d.location FROM Department d GROUP BY d.location")
-    List<Object[]> findDistinctLocations();
+    List<String> findDistinctLocations();
 
     @Query("SELECT d FROM Department d WHERE YEAR(d.establishedDate) = :year")
     List<Department> findDepartmentByEstablishedYear(@Param("year") int year);
