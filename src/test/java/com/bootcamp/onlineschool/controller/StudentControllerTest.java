@@ -1,6 +1,7 @@
 package com.bootcamp.onlineschool.controller;
 
 import com.bootcamp.onlineschool.dto.StudentDTO;
+import com.bootcamp.onlineschool.exception.ResourceNotFoundException;
 import com.bootcamp.onlineschool.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(StudentController.class)
@@ -43,7 +43,6 @@ public class StudentControllerTest {
         mockMvc.perform(post("/api/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(header().string("Location", endsWith("/api/students/S001")))
@@ -146,10 +145,13 @@ public class StudentControllerTest {
     @DisplayName("GET /api/students/{id} - returns 404 when not found")
     public void testGetStudentById_NotFound() throws Exception {
         when(studentService.getStudentById("MISSING"))
-                .thenThrow(new StudentService.StudentNotFoundException("Student not found: MISSING"));
+                .thenThrow(new ResourceNotFoundException("Student not found: MISSING"));
 
         mockMvc.perform(get("/api/students/MISSING"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.path").value("/api/students/MISSING"));
     }
 
     @Test
@@ -171,12 +173,13 @@ public class StudentControllerTest {
     public void testUpdateStudent_NotFound() throws Exception {
         StudentDTO dto = new StudentDTO("MISSING", "Ghost", "ghost@school.edu", 3.0);
         when(studentService.updateStudent(eq("MISSING"), any(StudentDTO.class)))
-                .thenThrow(new StudentService.StudentNotFoundException("Student not found: MISSING"));
+                .thenThrow(new ResourceNotFoundException("Student not found: MISSING"));
 
         mockMvc.perform(put("/api/students/MISSING")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404));
     }
 
     @Test
@@ -193,11 +196,12 @@ public class StudentControllerTest {
     @Test
     @DisplayName("DELETE /api/students/{id} - returns 404 when not found")
     public void testDeleteStudent_NotFound() throws Exception {
-        doThrow(new StudentService.StudentNotFoundException("Student not found: MISSING"))
+        doThrow(new ResourceNotFoundException("Student not found: MISSING"))
                 .when(studentService).deleteStudent("MISSING");
 
         mockMvc.perform(delete("/api/students/MISSING"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404));
     }
 
     @Test

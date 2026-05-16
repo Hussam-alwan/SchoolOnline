@@ -2,6 +2,7 @@ package com.bootcamp.onlineschool.service;
 
 import com.bootcamp.onlineschool.StudentRegistry;
 import com.bootcamp.onlineschool.dto.StudentDTO;
+import com.bootcamp.onlineschool.exception.ResourceNotFoundException;
 import com.bootcamp.onlineschool.model.Student;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -111,7 +112,7 @@ public class StudentService {
     /**
      * Custom exception for student not found
      */
-    public static class StudentNotFoundException extends RuntimeException {
+    public static class StudentNotFoundException extends ResourceNotFoundException {
         public StudentNotFoundException(String message) {
             super(message);
         }
