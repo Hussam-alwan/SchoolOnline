@@ -24,7 +24,9 @@ public class Course {
         this.maxStudents = maxStudents;
         this.enrolledStudents = 0;
     }
-    
+    public Course() {
+
+    }
     public String getCourseId() {
         return courseId;
     }
@@ -52,7 +54,27 @@ public class Course {
     public int getAvailableSeats() {
         return maxStudents - enrolledStudents;
     }
-    
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
+    public void setMaxStudents(int maxStudents) {
+        this.maxStudents = maxStudents;
+    }
+
+    public void setEnrolledStudents(int enrolledStudents) {
+        this.enrolledStudents = enrolledStudents;
+    }
+
     public boolean isFull() {
         return enrolledStudents >= maxStudents;
     }

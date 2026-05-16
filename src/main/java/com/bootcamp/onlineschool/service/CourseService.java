@@ -1,8 +1,10 @@
 package com.bootcamp.onlineschool.service;
 
+import com.bootcamp.onlineschool.dto.CourseDTO;
 import com.bootcamp.onlineschool.model.Course;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * CourseService demonstrates Spring Boot service with in-memory storage
@@ -96,7 +98,97 @@ public class CourseService {
     public int getTotalCourses() {
         return courses.size();
     }
-    
+
+    public CourseDTO createCourseDTO(CourseDTO dto) {
+        Course created = createCourse(
+                dto.getId(),
+                dto.getCourseName(),
+                dto.getCredits(),
+                dto.getInstructor(),
+                dto.getMaxStudents()
+        );
+        return toDTO(created);
+    }
+
+    public List<CourseDTO> getAllCoursesDTO() {
+        return getAllCourses().stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public CourseDTO getCourseByIdDTO(String courseId) {
+        return toDTO(getCourseById(courseId));
+    }
+
+    public CourseDTO updateCourse(String courseId, CourseDTO dto) {
+        Course existing = getCourseById(courseId);
+        existing.setCourseName(dto.getCourseName());
+        existing.setCredits(dto.getCredits());
+        existing.setInstructor(dto.getInstructor());
+        existing.setMaxStudents(dto.getMaxStudents());
+        return toDTO(existing);
+    }
+
+    public void deleteCourseOrThrow(String courseId) {
+        if (!deleteCourse(courseId)) {
+            throw new CourseNotFoundException("Course not found: " + courseId);
+        }
+    }
+
+    public CourseDTO enrollStudentDTO(String courseId) {
+        Course course = getCourseById(courseId);
+        if (course.isFull()) {
+            throw new CourseFullException(
+                    "Course '" + courseId + "' is full (" +
+                            course.getMaxStudents() + "/" + course.getMaxStudents() + " seats taken)");
+        }
+        course.enrollStudent();
+        return toDTO(course);
+    }
+
+    public CourseDTO unenrollStudentDTO(String courseId) {
+        Course course = getCourseById(courseId);
+        if (course.getEnrolledStudents() <= 0) {
+            throw new NoStudentsEnrolledException(
+                    "Course '" + courseId + "' has no enrolled students to remove");
+        }
+        course.unenrollStudent();
+        return toDTO(course);
+    }
+
+    public List<CourseDTO> getAvailableCoursesDTO() {
+        return getAvailableCourses().stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<CourseDTO> getCoursesByInstructor(String instructorName) {
+        return courses.values().stream()
+                .filter(c -> c.getInstructor().equalsIgnoreCase(instructorName))
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<CourseDTO> searchCourses(String name, Integer minCredits) {
+        return courses.values().stream()
+                .filter(c -> name == null ||
+                        c.getCourseName().toLowerCase().contains(name.toLowerCase()))
+                .filter(c -> minCredits == null || c.getCredits() >= minCredits)
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    CourseDTO toDTO(Course course) {
+        return new CourseDTO(
+                course.getCourseId(),
+                course.getCourseName(),
+                course.getCredits(),
+                course.getInstructor(),
+                course.getMaxStudents(),
+                course.getEnrolledStudents()
+        );
+    }
+
     /**
      * Custom exception for course not found
      */
@@ -114,4 +206,13 @@ public class CourseService {
             super(message);
         }
     }
+
+    public static class CourseFullException extends RuntimeException {
+        public CourseFullException(String message) { super(message); }
+    }
+
+    public static class NoStudentsEnrolledException extends RuntimeException {
+        public NoStudentsEnrolledException(String message) { super(message); }
+    }
+
 }
