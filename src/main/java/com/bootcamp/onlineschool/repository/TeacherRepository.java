@@ -14,7 +14,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
     Optional<Teacher> findByEmail(String email);
 
-    List<Teacher> findByDepartment(String department);
+    List<Teacher> findByDepartmentName(String departmentName);
 
     List<Teacher> findByYearsOfExperienceGreaterThanEqual(Integer years);
 
@@ -26,6 +26,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     @Query("SELECT t FROM Teacher t WHERE SIZE(t.courses) >= :minCourses")
     List<Teacher> findTeachersWithMinCourses(@Param("minCourses") int minCourses);
 
-    @Query("SELECT AVG(t.salary) FROM Teacher t WHERE t.department = :dept")
+    @Query("SELECT AVG(t.salary) FROM Teacher t WHERE t.departmentName = :dept")
     Double getAverageSalaryByDepartment(@Param("dept") String department);
 }

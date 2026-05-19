@@ -14,7 +14,7 @@ public class TeacherDTO {
 
     @NotNull
     @Size(min = 1, max = 50)
-    private String department;
+    private String departmentName;
 
     @NotNull
     @Min(0)
@@ -27,11 +27,11 @@ public class TeacherDTO {
     public TeacherDTO() {
     }
 
-    public TeacherDTO(String name, String email, String department,
+    public TeacherDTO(String name, String email, String departmentName,
                       Integer yearsOfExperience, Double salary) {
         this.name = name;
         this.email = email;
-        this.department = department;
+        this.departmentName = departmentName;
         this.yearsOfExperience = yearsOfExperience;
         this.salary = salary;
     }
@@ -52,12 +52,12 @@ public class TeacherDTO {
         this.email = email;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public Integer getYearsOfExperience() {

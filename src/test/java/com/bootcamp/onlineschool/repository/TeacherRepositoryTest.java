@@ -1,7 +1,7 @@
 package com.bootcamp.onlineschool.repository;
 
-import com.bootcamp.onlineschool.entity.Course;
 import com.bootcamp.onlineschool.entity.Teacher;
+import com.bootcamp.onlineschool.model.Course;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,7 +68,7 @@ class TeacherRepositoryTest {
         saveTeacher("B", "b@school.edu", "Math", 2, 40000.0);
         saveTeacher("C", "c@school.edu", "Physics", 3, 50000.0);
 
-        List<Teacher> math = teacherRepository.findByDepartment("Math");
+        List<Teacher> math = teacherRepository.findByDepartmentName("Math");
         assertEquals(2, math.size());
     }
 

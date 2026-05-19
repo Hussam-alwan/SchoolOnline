@@ -1,8 +1,11 @@
 package com.bootcamp.onlineschool.service;
 
 import com.bootcamp.onlineschool.model.Course;
+import com.bootcamp.onlineschool.repository.CourseRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * CourseService demonstrates Spring Boot service with in-memory storage
@@ -14,40 +17,42 @@ import java.util.*;
  * - Exception handling
  */
 @Service
+@Transactional
 public class CourseService {
-    
-    private final Map<String, Course> courses = new HashMap<>();
-    
+
+    private final CourseRepository courseRepository;
+
     /**
      * Create a new course
      */
-    public Course createCourse(String courseId, String courseName, int credits, 
+    public CourseService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
+
+    public Course createCourse(String courseId, String courseName, int credits,
                                String instructor, int maxStudents) {
-        if (courses.containsKey(courseId)) {
+        if (courseRepository.existsByCourseId(courseId)) {
             throw new CourseAlreadyExistsException("Course already exists: " + courseId);
         }
-        
         Course course = new Course(courseId, courseName, credits, instructor, maxStudents);
-        courses.put(courseId, course);
-        return course;
+        return courseRepository.save(course);
     }
     
     /**
      * Get course by ID
      */
+    @Transactional(readOnly = true)
     public Course getCourseById(String courseId) {
-        Course course = courses.get(courseId);
-        if (course == null) {
-            throw new CourseNotFoundException("Course not found: " + courseId);
-        }
-        return course;
+        return courseRepository.findByCourseId(courseId)
+                .orElseThrow(() -> new CourseNotFoundException("Course not found: " + courseId));
     }
     
     /**
      * Get all courses
      */
+    @Transactional(readOnly = true)
     public List<Course> getAllCourses() {
-        return new ArrayList<>(courses.values());
+        return courseRepository.findAll();
     }
     
     /**
@@ -55,7 +60,11 @@ public class CourseService {
      */
     public boolean enrollStudent(String courseId) {
         Course course = getCourseById(courseId);
-        return course.enrollStudent();
+        boolean enrolled = course.enrollStudent();
+        if (enrolled) {
+            courseRepository.save(course);
+        }
+        return enrolled;
     }
     
     /**
@@ -63,14 +72,19 @@ public class CourseService {
      */
     public boolean unenrollStudent(String courseId) {
         Course course = getCourseById(courseId);
-        return course.unenrollStudent();
+        boolean unenrolled = course.unenrollStudent();
+        if (unenrolled) {
+            courseRepository.save(course);
+        }
+        return unenrolled;
     }
-    
+
     /**
      * Get available courses (not full)
      */
+    @Transactional(readOnly = true)
     public List<Course> getAvailableCourses() {
-        return courses.values().stream()
+        return courseRepository.findAll().stream()
                 .filter(c -> !c.isFull())
                 .toList();
     }
@@ -81,20 +95,27 @@ public class CourseService {
     public void updateInstructor(String courseId, String newInstructor) {
         Course course = getCourseById(courseId);
         course.setInstructor(newInstructor);
+        courseRepository.save(course);
     }
     
     /**
      * Delete course
      */
     public boolean deleteCourse(String courseId) {
-        return courses.remove(courseId) != null;
+        return courseRepository.findByCourseId(courseId)
+                .map(c -> {
+                    courseRepository.delete(c);
+                    return true;
+                })
+                .orElse(false);
     }
     
     /**
      * Get total number of courses
      */
+    @Transactional(readOnly = true)
     public int getTotalCourses() {
-        return courses.size();
+        return (int) courseRepository.count();
     }
     
     /**

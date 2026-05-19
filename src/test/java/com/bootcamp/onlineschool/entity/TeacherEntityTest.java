@@ -1,5 +1,6 @@
 package com.bootcamp.onlineschool.entity;
 
+import com.bootcamp.onlineschool.model.Course;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

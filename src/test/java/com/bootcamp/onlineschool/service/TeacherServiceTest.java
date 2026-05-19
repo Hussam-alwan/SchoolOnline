@@ -1,8 +1,8 @@
 package com.bootcamp.onlineschool.service;
 
 import com.bootcamp.onlineschool.dto.TeacherDTO;
-import com.bootcamp.onlineschool.entity.Course;
 import com.bootcamp.onlineschool.entity.Teacher;
+import com.bootcamp.onlineschool.model.Course;
 import com.bootcamp.onlineschool.exception.ResourceNotFoundException;
 import com.bootcamp.onlineschool.repository.CourseRepository;
 import com.bootcamp.onlineschool.repository.TeacherRepository;

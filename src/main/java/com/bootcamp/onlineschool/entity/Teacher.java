@@ -1,5 +1,6 @@
 package com.bootcamp.onlineschool.entity;
 
+import com.bootcamp.onlineschool.model.Course;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -30,8 +31,12 @@ public class Teacher {
 
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(nullable = false, length = 50)
-    private String department;
+    @Column(name = "department_name", nullable = false, length = 50)
+    private String departmentName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
     @NotNull
     @Min(0)
@@ -49,11 +54,11 @@ public class Teacher {
     public Teacher() {
     }
 
-    public Teacher(String name, String email, String department,
+    public Teacher(String name, String email, String departmentName,
                    Integer yearsOfExperience, Double salary) {
         this.name = name;
         this.email = email;
-        this.department = department;
+        this.departmentName = departmentName;
         this.yearsOfExperience = yearsOfExperience;
         this.salary = salary;
     }
@@ -92,11 +97,19 @@ public class Teacher {
         this.email = email;
     }
 
-    public String getDepartment() {
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 
@@ -143,7 +156,7 @@ public class Teacher {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", department='" + department + '\'' +
+                ", departmentName='" + departmentName + '\'' +
                 ", yearsOfExperience=" + yearsOfExperience +
                 ", salary=" + salary +
                 '}';
