@@ -1,13 +1,16 @@
 package com.bootcamp.onlineschool.model;
 
 import com.bootcamp.onlineschool.entity.Department;
+import com.bootcamp.onlineschool.entity.Enrollment;
 import com.bootcamp.onlineschool.entity.Teacher;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Course class demonstrating:
@@ -52,6 +55,9 @@ public class Course {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Enrollment> enrollments = new HashSet<>();
 
     public Course() {
     }
@@ -140,6 +146,24 @@ public class Course {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public Set<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(Set<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    public void addEnrollment(Enrollment enrollment) {
+        enrollments.add(enrollment);
+        enrollment.setCourse(this);
+    }
+
+    public void removeEnrollment(Enrollment enrollment) {
+        enrollments.remove(enrollment);
+        enrollment.setCourse(null);
     }
 
     public int getAvailableSeats() {
