@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "departments")
-public class Department {
+public class Department extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

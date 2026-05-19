@@ -1,6 +1,7 @@
 package com.bootcamp.onlineschool.model;
 
 import com.bootcamp.onlineschool.entity.Enrollment;
+import com.bootcamp.onlineschool.entity.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -21,7 +22,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "students")
-public class Student {
+public class Student extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

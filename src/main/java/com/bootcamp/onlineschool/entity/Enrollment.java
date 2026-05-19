@@ -15,7 +15,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "enrollments",
         uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "course_id"}))
-public class Enrollment {
+public class Enrollment extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

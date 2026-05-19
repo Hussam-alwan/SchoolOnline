@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "teachers")
-public class Teacher {
+public class Teacher extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

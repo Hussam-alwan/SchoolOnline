@@ -3,6 +3,7 @@ package com.bootcamp.onlineschool.model;
 import com.bootcamp.onlineschool.entity.Department;
 import com.bootcamp.onlineschool.entity.Enrollment;
 import com.bootcamp.onlineschool.entity.Teacher;
+import com.bootcamp.onlineschool.entity.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "courses")
-public class Course {
+public class Course extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,6 +75,10 @@ public class Course {
         this.instructor = instructor;
         this.maxStudents = maxStudents;
         this.enrolledStudents = 0;
+    }
+
+    public Course(String cs101, String introductionToComputerScience, int i) {
+        super();
     }
 
     public Long getId() {
