@@ -17,6 +17,7 @@ export default function StudentForm({ onSubmit, initialData = null }) {
       ...prev,
       [name]: name === 'gpa' ? parseFloat(value) : value
     }));
+    setSuccess(false);
   };
 
   const handleSubmit = async (e) => {
