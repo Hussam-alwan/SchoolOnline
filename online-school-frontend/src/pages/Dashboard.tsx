@@ -19,13 +19,16 @@ import {
 import { studentService, teacherService, courseService, classService, registrationService } from '../services/api';
 
 interface DashboardStats {
-  totalStudents: number;
-  totalTeachers: number;
-  totalCourses: number;
-  totalClasses: number;
-  totalRegistrations: number;
-  activeRegistrations: number;
+  totalStudents: number | null;
+  totalTeachers: number | null;
+  totalCourses: number | null;
+  totalClasses: number | null;
+  totalRegistrations: number | null;
+  activeRegistrations: number | null;
 }
+
+const countOr = <T,>(result: PromiseSettledResult<{ data: T[] }>): number | null =>
+  result.status === 'fulfilled' ? result.value.data.length : null;
 
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
@@ -43,13 +46,7 @@ const Dashboard: React.FC = () => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const [
-          studentsResponse,
-          teachersResponse,
-          coursesResponse,
-          classesResponse,
-          registrationsResponse,
-        ] = await Promise.all([
+        const [students, teachers, courses, classes, registrations] = await Promise.allSettled([
           studentService.getAll(),
           teacherService.getAll(),
           courseService.getAll(),
@@ -57,16 +54,16 @@ const Dashboard: React.FC = () => {
           registrationService.getAll(),
         ]);
 
-        const activeRegistrations = registrationsResponse.data.filter(
-          (reg) => reg.status === 'ACTIVE'
-        ).length;
+        const activeRegistrations = registrations.status === 'fulfilled'
+          ? registrations.value.data.filter((reg) => reg.status === 'ACTIVE').length
+          : null;
 
         setStats({
-          totalStudents: studentsResponse.data.length,
-          totalTeachers: teachersResponse.data.length,
-          totalCourses: coursesResponse.data.length,
-          totalClasses: classesResponse.data.length,
-          totalRegistrations: registrationsResponse.data.length,
+          totalStudents: countOr(students),
+          totalTeachers: countOr(teachers),
+          totalCourses: countOr(courses),
+          totalClasses: countOr(classes),
+          totalRegistrations: countOr(registrations),
           activeRegistrations,
         });
       } catch (err) {
@@ -181,7 +178,7 @@ const Dashboard: React.FC = () => {
                     {card.title}
                   </Typography>
                   <Typography variant="h4" component="div" sx={{ color: card.color }}>
-                    {card.value}
+                    {card.value === null ? '—' : card.value}
                   </Typography>
                 </Box>
                 <Box sx={{ color: card.color }}>
@@ -210,13 +207,13 @@ const Dashboard: React.FC = () => {
                 Recent Activity
               </Typography>
               <Typography color="text.secondary">
-                • {stats.activeRegistrations} students are currently enrolled in courses
+                • {stats.activeRegistrations ?? '—'} students are currently enrolled in courses
               </Typography>
               <Typography color="text.secondary">
-                • {stats.totalClasses} classes are scheduled for this semester
+                • {stats.totalClasses ?? '—'} classes are scheduled for this semester
               </Typography>
               <Typography color="text.secondary">
-                • {stats.totalTeachers} teachers are managing courses
+                • {stats.totalTeachers ?? '—'} teachers are managing courses
               </Typography>
             </CardContent>
           </Card>
