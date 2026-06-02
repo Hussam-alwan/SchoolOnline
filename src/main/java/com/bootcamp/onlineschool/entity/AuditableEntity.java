@@ -29,6 +29,17 @@ public abstract class AuditableEntity {
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

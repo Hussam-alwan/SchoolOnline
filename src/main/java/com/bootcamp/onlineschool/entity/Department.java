@@ -5,12 +5,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.Where;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "departments")
+@Where(clause = "\"deleted\" = false")
+//@SoftDelete
+//@SQLRestriction
 public class Department extends AuditableEntity {
 
     @Id

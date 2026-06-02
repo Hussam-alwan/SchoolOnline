@@ -60,9 +60,17 @@ public class DepartmentService {
         return departmentRepository.save(department);
     }
 
-    public void deleteDepartment(Long id) {
+ public void deleteDepartment(Long id) {
         Department department = getDepartmentById(id);
-        departmentRepository.delete(department);
+        department.setDeleted(true);
+        departmentRepository.save(department);
+    }
+
+    public void permanentlyDeleteDepartment(Long id) {
+        departmentRepository.hardDeleteById(id);
+    }
+    public void restoreDepartment(Long id) {
+        departmentRepository.restoreById(id);
     }
 
     public void assignTeacherToDepartment(Long departmentId, Long teacherId) {
