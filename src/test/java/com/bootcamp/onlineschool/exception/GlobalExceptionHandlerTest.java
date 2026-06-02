@@ -45,12 +45,12 @@ public class GlobalExceptionHandlerTest {
         when(studentService.getStudentById("MISSING"))
                 .thenThrow(new ResourceNotFoundException("Student not found: MISSING"));
 
-        mockMvc.perform(get("/api/students/MISSING"))
+        mockMvc.perform(get("/api/v1/students/MISSING"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("Not Found"))
                 .andExpect(jsonPath("$.message").value("Student not found: MISSING"))
-                .andExpect(jsonPath("$.path").value("/api/students/MISSING"))
+                .andExpect(jsonPath("$.path").value("/api/v1/students/MISSING"))
                 .andExpect(jsonPath("$.timestamp", notNullValue()));
     }
 
@@ -60,10 +60,10 @@ public class GlobalExceptionHandlerTest {
         doThrow(new ResourceNotFoundException("Student not found: X"))
                 .when(studentService).deleteStudent("X");
 
-        mockMvc.perform(delete("/api/students/X"))
+        mockMvc.perform(delete("/api/v1/students/X"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.path").value("/api/students/X"));
+                .andExpect(jsonPath("$.path").value("/api/v1/students/X"));
     }
 
     @Test
@@ -73,14 +73,14 @@ public class GlobalExceptionHandlerTest {
         when(studentService.addStudent(any(StudentDTO.class)))
                 .thenThrow(new BadRequestException("Invalid student data"));
 
-        mockMvc.perform(post("/api/students")
+        mockMvc.perform(post("/api/v1/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.error").value("Bad Request"))
                 .andExpect(jsonPath("$.message").value("Invalid student data"))
-                .andExpect(jsonPath("$.path").value("/api/students"));
+                .andExpect(jsonPath("$.path").value("/api/v1/students"));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class GlobalExceptionHandlerTest {
         when(studentService.addStudent(any(StudentDTO.class)))
                 .thenThrow(new ConflictException("Student already exists: S001"));
 
-        mockMvc.perform(post("/api/students")
+        mockMvc.perform(post("/api/v1/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isConflict())
@@ -104,14 +104,14 @@ public class GlobalExceptionHandlerTest {
     public void testValidationErrors_MultipleFields() throws Exception {
         StudentDTO dto = new StudentDTO("S001", "", "not-an-email", 5.0);
 
-        mockMvc.perform(post("/api/students")
+        mockMvc.perform(post("/api/v1/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.error").value("Validation Failed"))
                 .andExpect(jsonPath("$.message").value("Invalid request body"))
-                .andExpect(jsonPath("$.path").value("/api/students"))
+                .andExpect(jsonPath("$.path").value("/api/v1/students"))
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasItem(containsString("email"))))
                 .andExpect(jsonPath("$.errors", hasItem(containsString("gpa"))))
@@ -123,7 +123,7 @@ public class GlobalExceptionHandlerTest {
     public void testValidationErrors_SingleField() throws Exception {
         StudentDTO dto = new StudentDTO("S001", "John", "john@school.edu", 5.5);
 
-        mockMvc.perform(post("/api/students")
+        mockMvc.perform(post("/api/v1/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest())
@@ -134,20 +134,20 @@ public class GlobalExceptionHandlerTest {
     @Test
     @DisplayName("Malformed JSON returns 400 with Bad Request error")
     public void testMalformedJson() throws Exception {
-        mockMvc.perform(post("/api/students")
+        mockMvc.perform(post("/api/v1/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"not-valid-json\""))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.error").value("Bad Request"))
                 .andExpect(jsonPath("$.message").value("Malformed JSON request"))
-                .andExpect(jsonPath("$.path").value("/api/students"));
+                .andExpect(jsonPath("$.path").value("/api/v1/students"));
     }
 
     @Test
     @DisplayName("Wrong type in JSON body returns 400 with malformed JSON message")
     public void testMalformedJson_WrongType() throws Exception {
-        mockMvc.perform(post("/api/students")
+        mockMvc.perform(post("/api/v1/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":\"S001\",\"name\":\"John\",\"email\":\"a@b.c\",\"gpa\":\"not-a-number\"}"))
                 .andExpect(status().isBadRequest())
@@ -160,12 +160,12 @@ public class GlobalExceptionHandlerTest {
         when(studentService.getAllStudents())
                 .thenThrow(new RuntimeException("kaboom"));
 
-        mockMvc.perform(get("/api/students"))
+        mockMvc.perform(get("/api/v1/students"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.status").value(500))
                 .andExpect(jsonPath("$.error").value("Internal Server Error"))
                 .andExpect(jsonPath("$.message").value("An unexpected error occurred"))
-                .andExpect(jsonPath("$.path").value("/api/students"));
+                .andExpect(jsonPath("$.path").value("/api/v1/students"));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class GlobalExceptionHandlerTest {
         when(studentService.getStudentById(eq("X")))
                 .thenThrow(new ResourceNotFoundException("nope"));
 
-        mockMvc.perform(get("/api/students/X"))
+        mockMvc.perform(get("/api/v1/students/X"))
                 .andExpect(jsonPath("$.timestamp", notNullValue()));
     }
 
@@ -184,7 +184,7 @@ public class GlobalExceptionHandlerTest {
         when(studentService.getStudentById("X"))
                 .thenThrow(new StudentService.StudentNotFoundException("Student not found: X"));
 
-        mockMvc.perform(get("/api/students/X"))
+        mockMvc.perform(get("/api/v1/students/X"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("Not Found"));

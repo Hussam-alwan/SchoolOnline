@@ -1,8 +1,11 @@
 package com.bootcamp.onlineschool.dto;
 
 import jakarta.validation.constraints.*;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
-public class CourseDTO {
+@Relation(itemRelation = "course", collectionRelation = "courses")
+public class CourseDTO extends RepresentationModel<CourseDTO> {
 
     private String id;
 
