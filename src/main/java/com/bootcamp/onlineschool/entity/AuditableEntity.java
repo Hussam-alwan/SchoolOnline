@@ -32,6 +32,18 @@ public abstract class AuditableEntity {
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
 
+    @Version
+    @Column(name = "version", nullable = false)
+    private Long version;
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     public boolean isDeleted() {
         return deleted;
     }

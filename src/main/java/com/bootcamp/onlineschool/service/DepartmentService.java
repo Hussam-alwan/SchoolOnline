@@ -8,6 +8,7 @@ import com.bootcamp.onlineschool.model.Course;
 import com.bootcamp.onlineschool.repository.CourseRepository;
 import com.bootcamp.onlineschool.repository.DepartmentRepository;
 import com.bootcamp.onlineschool.repository.TeacherRepository;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +58,25 @@ public class DepartmentService {
         department.setCode(dto.getCode());
         department.setBudget(dto.getBudget());
         department.setLocation(dto.getLocation());
-        return departmentRepository.save(department);
+        return departmentRepository.saveAndFlush(department);
+    }
+
+    public Department updateBudgetWithRetry(Long id, Double newBudget, int maxAttempts) {
+        if (maxAttempts < 1) {
+            throw new IllegalArgumentException("maxAttempts must be at least 1");
+        }
+        ObjectOptimisticLockingFailureException lastFailure = null;
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                Department department = getDepartmentById(id);
+                department.setBudget(newBudget);
+                return departmentRepository.saveAndFlush(department);
+            } catch (ObjectOptimisticLockingFailureException ex) {
+                lastFailure = ex;
+                // Lost the race against a concurrent update; loop to re-read and retry.
+            }
+        }
+        throw lastFailure;
     }
 
  public void deleteDepartment(Long id) {
