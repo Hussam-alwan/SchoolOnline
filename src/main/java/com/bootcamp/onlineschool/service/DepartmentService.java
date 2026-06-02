@@ -62,7 +62,9 @@ public class DepartmentService {
 
     public void deleteDepartment(Long id) {
         Department department = getDepartmentById(id);
-        departmentRepository.delete(department);
+        department.setDeleted(true);
+        departmentRepository.save(department);
+        //departmentRepository.delete(department);
     }
 
     public void assignTeacherToDepartment(Long departmentId, Long teacherId) {
